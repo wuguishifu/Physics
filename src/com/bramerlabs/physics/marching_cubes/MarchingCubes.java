@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class MarchingCubes {
 
-    private static float meshSize = 10, squareSize = 0.1f;
+    private static float meshSize = 10, squareSize = 0.02f;
     private static float width = meshSize, height = meshSize, depth = meshSize;
     private static float x0 = -width/2, y0 = -height/2, z0 = -depth/2;
     private static float[] x, y, z;
@@ -53,7 +53,7 @@ public class MarchingCubes {
         Vertex[] vertices = new Vertex[triangles.size() * 3];
         for (int i = 0; i < triangles.size(); i++) {
             Triangle t = triangles.get(i);
-            Vector3f n1 = Vector3f.subtract(new Vector3f(0), Vector3f.normalize(Vector3f.cross(Vector3f.subtract(t.getV2(), t.getV1()), Vector3f.subtract(t.getV3(), t.getV1()))));
+            Vector3f n1 = Vector3f.normalize(Vector3f.cross(Vector3f.subtract(t.getV2(), t.getV1()), Vector3f.subtract(t.getV3(), t.getV1())));
 
             Vector3f v1 = new Vector3f(t.getV1());
             Vector3f v2 = new Vector3f(t.getV2());
@@ -79,8 +79,11 @@ public class MarchingCubes {
      * @return - if the position (x, y, z) lies inside the contour surface
      */
     private static boolean inFunc(float x, float y, float z) {
-//        return x*x + y * y + z * z < 4 * 4;
-        return x * x + y * y < Math.abs(z);
+//        return x*x + y * y + z * z > 4 * 4; // sphere
+//        return x * x + y * y > Math.abs(z); // hyperbolas
+//        return Math.sin(x)*Math.sin(x) + Math.sin(z)*Math.sin(z) < y; // sin grid
+        return 1 - Math.pow((4 - Math.sqrt(x * x + z * z)), 2) < y * y; // torus
+//        return !(x * x + y * y + z * z < 16 && (x - 2) * (x - 2) + y * y + z * z > 9); // sphere intersection
     }
 
     /**
@@ -103,8 +106,8 @@ public class MarchingCubes {
                     int q5 = inFunc(x1, y1, z1) ? 32 : 0;
                     int q6 = inFunc(x1, y1, z0) ? 64 : 0;
                     int q7 = inFunc(x0, y1, z0) ? 128 : 0;
-                    cases[i][j][k] = q0 + q1 + q2 + q3 + q4 + q5 + q6 + q7;
-                    int[] faceLookup = triTable[cases[i][j][k]];
+                    int caseVal = q0 + q1 + q2 + q3 + q4 + q5 + q6 + q7;
+                    int[] faceLookup = triTable[caseVal];
                     for (int val = 0; val < faceLookup.length/3; val++) {
                         Vector3f v1 = getVertexPosition(x0, x1, y0, y1, z0, z1, faceLookup[3 * val    ]);
                         Vector3f v2 = getVertexPosition(x0, x1, y0, y1, z0, z1, faceLookup[3 * val + 1]);
