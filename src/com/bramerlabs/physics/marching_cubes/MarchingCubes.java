@@ -82,8 +82,8 @@ public class MarchingCubes {
 //        return x*x + y * y + z * z > 4 * 4; // sphere
 //        return x * x + y * y > Math.abs(z); // hyperbolas
 //        return Math.sin(x)*Math.sin(x) + Math.sin(z)*Math.sin(z) < y; // sin grid
-        return 1 - Math.pow((4 - Math.sqrt(x * x + z * z)), 2) < y * y; // torus
-//        return !(x * x + y * y + z * z < 16 && (x - 2) * (x - 2) + y * y + z * z > 9); // sphere intersection
+//        return 1 - Math.pow((4 - Math.sqrt(x * x + z * z)), 2) < y * y; // torus
+        return !(x * x + y * y + z * z < 16 && (x - 2) * (x - 2) + y * y + z * z > 9); // sphere intersection
     }
 
     /**
