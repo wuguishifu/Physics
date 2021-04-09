@@ -11,12 +11,11 @@ import java.util.ArrayList;
 
 public class MarchingCubes {
 
-    private static float meshSize = 10, squareSize = 0.02f;
+    private static final float meshSize = 10, squareSize = 0.25f;
     private static float width = meshSize, height = meshSize, depth = meshSize;
     private static float x0 = -width/2, y0 = -height/2, z0 = -depth/2;
     private static float[] x, y, z;
     private static int sx, sy, sz;
-    private static int[][][] cases;
 
     /**
      * creates the marching cubes mesh object
@@ -45,7 +44,6 @@ public class MarchingCubes {
         for (int i = 0; i < z.length; i++) {
             z[i] = z0 + squareSize * i;
         }
-        cases = new int[sx][sy][sz];
 
         Vector4f color = new Vector4f(0.5f, 0.5f, 0.5f, 1.0f);
 
@@ -79,11 +77,11 @@ public class MarchingCubes {
      * @return - if the position (x, y, z) lies inside the contour surface
      */
     private static boolean inFunc(float x, float y, float z) {
-//        return x*x + y * y + z * z > 4 * 4; // sphere
+        return x*x + y * y + z * z > 4 * 4; // sphere
 //        return x * x + y * y > Math.abs(z); // hyperbolas
 //        return Math.sin(x)*Math.sin(x) + Math.sin(z)*Math.sin(z) < y; // sin grid
 //        return 1 - Math.pow((4 - Math.sqrt(x * x + z * z)), 2) < y * y; // torus
-        return !(x * x + y * y + z * z < 16 && (x - 2) * (x - 2) + y * y + z * z > 9); // sphere intersection
+//        return !(x * x + y * y + z * z < 16 && (x - 2) * (x - 2) + y * y + z * z > 9); // sphere intersection
     }
 
     /**
