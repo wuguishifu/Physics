@@ -85,7 +85,10 @@ public class MarchingCubes {
 //        return Math.sin(x)*Math.sin(x) + Math.sin(z)*Math.sin(z) < y; // sin grid
 //        return 1 - Math.pow((4 - Math.sqrt(x * x + z * z)), 2) < y * y; // torus
 //        return !(x * x + y * y + z * z < 16 && (x - 2) * (x - 2) + y * y + z * z > 9); // sphere intersection
-        return noise.noise(x * 0.25f, y * 0.2f, z * 0.25f) < 0.5f;
+        return noise.noise(x * 0.25f, y * 0.2f, z * 0.25f) < 0.5f; // noise function
+//        return Math.random() < 0.5f; // random function
+//        return false; // test function
+//        return true; // test function
     }
 
     /**
