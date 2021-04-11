@@ -2,7 +2,7 @@ package com.bramerlabs.physics.marching_squares;
 
 import java.awt.*;
 
-public class Mesh {
+public class MarchingSquares {
 
     int width, height;
 
@@ -14,7 +14,7 @@ public class Mesh {
 
     int[][] cases;
 
-    public Mesh(int width, int height) {
+    public MarchingSquares(int width, int height) {
         this.width = width;
         this.height = height;
 

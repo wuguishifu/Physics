@@ -9,7 +9,7 @@ public class Main {
 
     static int width = 1600, height = 1200;
 
-    static Mesh mesh = new Mesh(width, height);
+    static MarchingSquares mesh = new MarchingSquares(width, height);
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Marching Cubes");
