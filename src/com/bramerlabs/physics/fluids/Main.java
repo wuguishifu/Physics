@@ -18,7 +18,7 @@ public class Main {
     Vector3f[][] velocity = new Vector3f[size][size];
     Vector3f[][] velocity_new = new Vector3f[size][size];
 
-    float k = 0.01f;
+    float k = 0.05f;
     int numIter = 5;
     private float dx0y0;
 
