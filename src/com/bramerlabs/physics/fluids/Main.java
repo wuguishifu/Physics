@@ -33,7 +33,7 @@ public class Main {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 density_new[i][j] = 0;
-                velocity[i][j] = new Vector2f(2, 0);
+                velocity[i][j] = new Vector2f(0, 0);
             }
         }
 
@@ -118,8 +118,8 @@ public class Main {
             }
 
             // update density
-            calculateDensity();
             advection();
+            calculateDensity();
 
             // repaint the
             panel.repaint();
@@ -184,39 +184,39 @@ public class Main {
     }
 
     public void advection() {
-        for (int iter = 0; iter < numIter; iter++) {
-            for (int i = 0; i < size; i++) {
-                for (int j = 0; j < size; j++) {
-                    Vector2f prevPos = (new Vector2f(i, j)).subtract(velocity[i][j]);
-                    float px = prevPos.x;
-                    float py = prevPos.y;
-                    int floorX = (int) px;
-                    int floorY = (int) py;
-                    float fracX = px % 1;
-                    float fracY = py % 1;
-                    if (floorX + 1 < size && floorY + 1 < size && floorX >= 0 && floorY >= 0) {
-                        float z1 = lerp(density[floorX][floorY], density[floorX + 1][floorY], fracX);
-                        float z2 = lerp(density[floorX][floorY + 1], density[floorX + 1][floorY + 1], fracX);
-                        density_new[i][j] = lerp(z1, z2, fracY);
-                    } else if (floorX + 1 < size && floorY + 1 < size && floorX >= 0 && floorY >= -1) {
-                        float z1 = lerp(0, 0, fracX);
-                        float z2 = lerp(density[floorX][floorY + 1], density[floorX + 1][floorY + 1], fracX);
-                        density_new[i][j] = lerp(z1, z2, fracY);
-                    } else if (floorX + 1 < size && floorY + 1 < size && floorY >= 0 && floorX >= -1) {
-                        float z1 = lerp(0, density[floorX + 1][floorY], fracX);
-                        float z2 = lerp(0, density[floorX + 1][floorY + 1], fracX);
-                        density_new[i][j] = lerp(z1, z2, fracY);
-                    } else if (floorY + 1 < size && floorX + 1 <= size && floorX >= 0 && floorY >= 0) {
-                        float z1 = lerp(density[floorX][floorY], 0, fracX);
-                        float z2 = lerp(density[floorX][floorY + 1], 0, fracX);
-                        density_new[i][j] = lerp(z1, z2, fracY);
-                    } else if (floorY + 1 <= size && floorX + 1 < size && floorX >= 0 && floorY >= 0) {
-                        float z1 = lerp(density[floorX][floorY], density[floorX + 1][floorY], fracX);
-                        float z2 = lerp(0, 0, fracX);
-                        density_new[i][j] = lerp(z1, z2, fracY);
-                    } else {
-                        density_new[i][j] = 0;
-                    }
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                Vector2f prevPos = (new Vector2f(i, j)).subtract(velocity[i][j]);
+                float px = prevPos.x;
+                float py = prevPos.y;
+                int floorX = (int) px;
+                int floorY = (int) py;
+                float fracX = px % 1;
+                float fracY = py % 1;
+                if (floorX + 1 < size && floorY + 1 < size && floorX >= 0 && floorY >= 0) {
+                    float z1 = lerp(density[floorX][floorY], density[floorX + 1][floorY], fracX);
+                    float z2 = lerp(density[floorX][floorY + 1], density[floorX + 1][floorY + 1], fracX);
+                    density_new[i][j] = lerp(z1, z2, fracY);
+                } else {
+                    density_new[i][j] = density[i][j];
+//                    } else if (floorX + 1 < size && floorY + 1 < size && floorX >= 0 && floorY >= -1) {
+//                        float z1 = lerp(0, 0, fracX);
+//                        float z2 = lerp(density[floorX][floorY + 1], density[floorX + 1][floorY + 1], fracX);
+//                        density_new[i][j] = lerp(z1, z2, fracY);
+//                    } else if (floorX + 1 < size && floorY + 1 < size && floorY >= 0 && floorX >= -1) {
+//                        float z1 = lerp(0, density[floorX + 1][floorY], fracX);
+//                        float z2 = lerp(0, density[floorX + 1][floorY + 1], fracX);
+//                        density_new[i][j] = lerp(z1, z2, fracY);
+//                    } else if (floorY + 1 < size && floorX + 1 <= size && floorX >= 0 && floorY >= 0) {
+//                        float z1 = lerp(density[floorX][floorY], 0, fracX);
+//                        float z2 = lerp(density[floorX][floorY + 1], 0, fracX);
+//                        density_new[i][j] = lerp(z1, z2, fracY);
+//                    } else if (floorY + 1 <= size && floorX + 1 < size && floorX >= 0 && floorY >= 0) {
+//                        float z1 = lerp(density[floorX][floorY], density[floorX + 1][floorY], fracX);
+//                        float z2 = lerp(0, 0, fracX);
+//                        density_new[i][j] = lerp(z1, z2, fracY);
+//                    } else {
+//                        density_new[i][j] = 0;
                 }
             }
         }
