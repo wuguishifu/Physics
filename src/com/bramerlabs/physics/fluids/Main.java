@@ -158,10 +158,10 @@ public class Main {
         for (int iter = 0; iter < numIter; iter++) {
             for (int i = 0; i < size; i++) {
                 for (int j = 0; j < size; j++) {
-                    float N = i - 1 > 0 ? density_new[i - 1][j] : -1;
-                    float S = i + 1 < size ? density_new[i + 1][j] : -1;
-                    float E = j - 1 > 0 ? density_new[i][j - 1] : -1;
-                    float W = j + 1 < size ? density_new[i][j + 1] : -1;
+                    float N = i - 1 > 0 ? density_new[i - 1][j] : 0; // possible solution to localized hotspots, otherwise use -1
+                    float S = i + 1 < size ? density_new[i + 1][j] : 0;
+                    float E = j - 1 > 0 ? density_new[i][j - 1] : 0;
+                    float W = j + 1 < size ? density_new[i][j + 1] : 0;
                     float den = (N != -1 ? N : 0)
                             + (S != -1 ? S : 0)
                             + (E != -1 ? E : 0)
