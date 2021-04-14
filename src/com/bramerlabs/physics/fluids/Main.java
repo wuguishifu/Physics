@@ -1,5 +1,6 @@
 package com.bramerlabs.physics.fluids;
 
+import com.bramerlabs.engine.math.vector.Vector2f;
 import com.bramerlabs.engine.math.vector.Vector3f;
 
 import javax.swing.*;
@@ -15,12 +16,10 @@ public class Main {
     int size = 32, boxSize = 32;
     float[][] density = new float[size][size];
     float[][] density_new = new float[size][size];
-    Vector3f[][] velocity = new Vector3f[size][size];
-    Vector3f[][] velocity_new = new Vector3f[size][size];
+    Vector2f[][] velocity = new Vector2f[size][size];
 
-    float k = 0.05f;
+    float k = 0.03f;
     int numIter = 5;
-    private float dx0y0;
 
     float mouseX, mouseY;
     int newX, newY;
@@ -34,7 +33,7 @@ public class Main {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 density_new[i][j] = 0;
-                velocity_new[i][j] = new Vector3f(0);
+                velocity[i][j] = new Vector2f(2, 0);
             }
         }
 
@@ -60,9 +59,9 @@ public class Main {
 //                        g.setColor(Color.BLACK);
 //                        drawCenteredText(g, i * boxSize, j * boxSize, (i + 1) * boxSize, (j + 1) * boxSize, String.format("%.3f", density[i][j]));
 
-                        // draw the grid
-                        g.setColor(Color.BLACK);
-                        g.drawRect(i * boxSize, j * boxSize, boxSize, boxSize);
+//                        // draw the grid
+//                        g.setColor(Color.BLACK);
+//                        g.drawRect(i * boxSize, j * boxSize, boxSize, boxSize);
 
                         // draw the mouse selection
                         int drawX = (int) (mouseX - (mouseX % boxSize));
@@ -120,6 +119,7 @@ public class Main {
 
             // update density
             calculateDensity();
+            advection();
 
             // repaint the
             panel.repaint();
@@ -181,5 +181,49 @@ public class Main {
                 }
             }
         }
+    }
+
+    public void advection() {
+        for (int iter = 0; iter < numIter; iter++) {
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < size; j++) {
+                    Vector2f prevPos = (new Vector2f(i, j)).subtract(velocity[i][j]);
+                    float px = prevPos.x;
+                    float py = prevPos.y;
+                    int floorX = (int) px;
+                    int floorY = (int) py;
+                    float fracX = px % 1;
+                    float fracY = py % 1;
+                    if (floorX + 1 < size && floorY + 1 < size && floorX >= 0 && floorY >= 0) {
+                        float z1 = lerp(density[floorX][floorY], density[floorX + 1][floorY], fracX);
+                        float z2 = lerp(density[floorX][floorY + 1], density[floorX + 1][floorY + 1], fracX);
+                        density_new[i][j] = lerp(z1, z2, fracY);
+                    } else if (floorX + 1 < size && floorY + 1 < size && floorX >= 0 && floorY >= -1) {
+                        float z1 = lerp(0, 0, fracX);
+                        float z2 = lerp(density[floorX][floorY + 1], density[floorX + 1][floorY + 1], fracX);
+                        density_new[i][j] = lerp(z1, z2, fracY);
+                    } else if (floorX + 1 < size && floorY + 1 < size && floorY >= 0 && floorX >= -1) {
+                        float z1 = lerp(0, density[floorX + 1][floorY], fracX);
+                        float z2 = lerp(0, density[floorX + 1][floorY + 1], fracX);
+                        density_new[i][j] = lerp(z1, z2, fracY);
+                    } else if (floorY + 1 < size && floorX + 1 <= size && floorX >= 0 && floorY >= 0) {
+                        float z1 = lerp(density[floorX][floorY], 0, fracX);
+                        float z2 = lerp(density[floorX][floorY + 1], 0, fracX);
+                        density_new[i][j] = lerp(z1, z2, fracY);
+                    } else if (floorY + 1 <= size && floorX + 1 < size && floorX >= 0 && floorY >= 0) {
+                        float z1 = lerp(density[floorX][floorY], density[floorX + 1][floorY], fracX);
+                        float z2 = lerp(0, 0, fracX);
+                        density_new[i][j] = lerp(z1, z2, fracY);
+                    } else {
+                        density_new[i][j] = 0;
+                    }
+                }
+            }
+        }
+    }
+
+    // linear interpolation
+    public float lerp(float a, float b, float k) {
+        return a + k * (b - a);
     }
 }
