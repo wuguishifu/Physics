@@ -5,9 +5,7 @@ import com.bramerlabs.engine.math.vector.Vector3f;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
 import java.awt.geom.Rectangle2D;
 
 public class Main {
@@ -24,6 +22,8 @@ public class Main {
     float mouseX, mouseY;
     int newX, newY;
     boolean mouseDown = false;
+
+    boolean done = false;
 
     public static void main(String[] args) {
         new Main().run();
@@ -96,14 +96,25 @@ public class Main {
             }
         };
 
+        KeyListener keyListener = new KeyListener() {
+            public void keyTyped(KeyEvent keyEvent) {}
+            public void keyPressed(KeyEvent keyEvent) {
+                if (keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    done = true;
+                }
+            }
+            public void keyReleased(KeyEvent keyEvent) {}
+        };
+
         panel.addMouseListener(mouseListener);
         panel.addMouseMotionListener(mouseMotionListener);
+        frame.addKeyListener(keyListener);
         frame.add(panel);
         frame.pack();
         frame.setVisible(true);
         panel.repaint();
 
-        while (true) {
+        while (!done) {
             // take mouse inputs
             if (mouseDown) {
                 density[Math.min(Math.max(newX, 0), size - 1)][Math.min(Math.max(newY, 0), size - 1)] += 5.0f;
@@ -122,6 +133,8 @@ public class Main {
                 break;
             }
         }
+
+        frame.dispose();
 
     }
 
