@@ -6,7 +6,8 @@ import java.awt.*;
 
 public class MassPoint {
 
-    private static final int radius = 3;
+    private static final int drawRadius = 3;
+    public static final float radius = 20f;
 
     public Vector2f position, velocity, force;
 
@@ -26,21 +27,21 @@ public class MassPoint {
 
         // add force: gravity, spring, normals
         force = Vector2f.add(force, springForce);
-        force = Vector2f.add(force, new Vector2f(0, 0.01f));
+        force = Vector2f.add(force, new Vector2f(0, 0.01f)); // gravity
 
         // perform the Euler integration
         // accelerate the velocity
         velocity = Vector2f.add(velocity, Vector2f.divide(force, new Vector2f(mass)));
 
         // move the position
-        position = Vector2f.add(position, velocity);
+        position = Vector2f.add(position, Vector2f.scale(velocity, 1));
     }
 
     public void paint(Graphics g) {
         g.setColor(Color.LIGHT_GRAY);
-        g.fillOval((int) position.x - radius, (int) position.y - radius, radius * 2, radius * 2);
+        g.fillOval((int) position.x - drawRadius, (int) position.y - drawRadius, drawRadius * 2, drawRadius * 2);
         g.setColor(Color.BLACK);
-        g.drawOval((int) position.x - radius, (int) position.y - radius, radius * 2, radius * 2);
+        g.drawOval((int) position.x - drawRadius, (int) position.y - drawRadius, drawRadius * 2, drawRadius * 2);
     }
 
 }

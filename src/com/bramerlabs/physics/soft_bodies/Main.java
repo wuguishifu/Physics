@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class Main {
 
-    private final static int width = 800, height = 600;
+    private final static int width = 1600, height = 1200;
 
     private Body body;
 
@@ -26,13 +26,13 @@ public class Main {
 
     public void run() {
 
-        body = new Body(new Vector2f(300, 200));
+        body = new Body(new Vector2f(300, 700));
         objects = new ArrayList<>();
         objects.add(new Object(new Vector2f[]{
-                new Vector2f(0, 600),
-                new Vector2f(100, 500),
-                new Vector2f(700, 500),
-                new Vector2f(800, 600)
+                new Vector2f(0, 1200),
+                new Vector2f(100, 1100),
+                new Vector2f(1500, 1100),
+                new Vector2f(1600, 1200)
         }));
 
         JFrame frame = new JFrame();

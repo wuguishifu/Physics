@@ -10,16 +10,16 @@ public class Spring {
     public MassPoint A, B;
 
     // stiffness
-    float ks;
+    double ks;
 
     // rest length
-    float L0;
+    double L0;
 
     // damping factor
-    float kd;
+    double kd;
 
     // default constructor
-    public Spring(MassPoint A, MassPoint B, float ks, float L0, float kd) {
+    public Spring(MassPoint A, MassPoint B, double ks, double L0, double kd) {
         this.A = A;
         this.B = B;
         this.ks = ks;
@@ -30,13 +30,13 @@ public class Spring {
     // calculate the magnitude of force between the two mass points
     public float calculateForce() {
         // calculate the spring force
-        float spring = (Vector2f.length(Vector2f.subtract(B.position, A.position)) - L0) * ks;
+        double spring = (Vector2f.length(Vector2f.subtract(B.position, A.position)) - L0) * ks;
 
         // calculate the dampening force
-        float damp = kd * Vector2f.length(Vector2f.multiply(Vector2f.subtract(B.position, A.position), Vector2f.subtract(B.velocity, A.velocity)));
+        double damp = kd * Vector2f.length(Vector2f.multiply(Vector2f.subtract(B.position, A.position), Vector2f.subtract(B.velocity, A.velocity)));
 
         // sum
-        return spring + damp;
+        return (float) (spring + damp);
     }
 
     public void paint(Graphics g) {
