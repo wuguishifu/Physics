@@ -78,11 +78,8 @@ public class Body {
                         Vector2f line = Vector2f.subtract(collisionLine[1], collisionLine[0]);
                         float a = Vector2f.dot(massPoints[i][j].position, Vector2f.normalize(line));
                         Vector2f aVec = Vector2f.normalize(line, a);
-//                        Vector2f direction = Vector2f.subtract(line, massPoints[i][j].position);
-//                        System.out.println(direction);
                         Vector2f normal = Vector2f.normalize(Vector2f.subtract(aVec, massPoints[i][j].position));
                         massPoints[i][j].velocity = Vector2f.subtract(massPoints[i][j].velocity, Vector2f.scale(normal, 2 * Vector2f.dot(massPoints[i][j].velocity, normal)));
-//                        massPoints[i][j].position = direction;
                     }
                 }
             }
