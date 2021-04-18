@@ -26,13 +26,12 @@ public class Main {
 
     public void run() {
 
-        body = new Body(new Vector2f(300, 700));
+        body = new Body(new Vector2f(width/4f, height/4f));
+
         objects = new ArrayList<>();
         objects.add(new Object(new Vector2f[]{
-                new Vector2f(0, 1200),
-                new Vector2f(100, 1100),
-                new Vector2f(1500, 1100),
-                new Vector2f(1600, 1200)
+                new Vector2f(0, 1100),
+                new Vector2f(1600, 1100),
         }));
 
         JFrame frame = new JFrame();
@@ -77,6 +76,10 @@ public class Main {
                     done = true;
                 } else if (keyEvent.getKeyCode() == KeyEvent.VK_SPACE) {
                     nextFrame = true;
+                } else if (keyEvent.getKeyCode() == KeyEvent.VK_A) {
+                    for (Spring spring : body.springs) {
+                        spring.L0 += 1.0f;
+                    }
                 }
             }
             public void keyReleased(KeyEvent keyEvent) {}
@@ -93,8 +96,10 @@ public class Main {
         while (!done) {
 
             body.update(objects);
-
             panel.repaint();
+
+
+//            // update manually
 //            while (!nextFrame) {
 //                try {
 //                    Thread.sleep(20);
@@ -103,6 +108,8 @@ public class Main {
 //                }
 //            }
 //            nextFrame = false;
+
+            // update automatically
             try {
                 Thread.sleep(20);
             } catch (InterruptedException e) {

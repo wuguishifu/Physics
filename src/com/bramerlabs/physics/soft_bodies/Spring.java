@@ -10,13 +10,13 @@ public class Spring {
     public MassPoint A, B;
 
     // stiffness
-    double ks;
+    public double ks;
 
     // rest length
-    double L0;
+    public double L0;
 
     // damping factor
-    double kd;
+    public double kd;
 
     // default constructor
     public Spring(MassPoint A, MassPoint B, double ks, double L0, double kd) {
@@ -33,7 +33,7 @@ public class Spring {
         double spring = (Vector2f.length(Vector2f.subtract(B.position, A.position)) - L0) * ks;
 
         // calculate the dampening force
-        double damp = kd * Vector2f.length(Vector2f.multiply(Vector2f.subtract(B.position, A.position), Vector2f.subtract(B.velocity, A.velocity)));
+        double damp = Vector2f.length(Vector2f.multiply(Vector2f.subtract(B.position, A.position), Vector2f.subtract(B.velocity, A.velocity))) * kd;
 
         // sum
         return (float) (spring + damp);

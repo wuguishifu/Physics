@@ -2,6 +2,7 @@
   <dictionary name="brame">
     <words>
       <w>advection</w>
+      <w>collidable</w>
       <w>frac</w>
       <w>iter</w>
       <w>lerp</w>

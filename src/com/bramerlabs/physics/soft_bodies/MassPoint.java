@@ -21,20 +21,19 @@ public class MassPoint {
         this.force = new Vector2f(0, 0);
     }
 
-    public void update(Vector2f springForce) {
-        // set force to 0
-        force = new Vector2f(0, 0);
-
+    public void updateForce(Vector2f springForce) {
         // add force: gravity, spring, normals
         force = Vector2f.add(force, springForce);
-        force = Vector2f.add(force, new Vector2f(0, 0.01f)); // gravity
+    }
 
-        // perform the Euler integration
-        // accelerate the velocity
+    public void updateVelocity(float gravity) {
+        force = Vector2f.add(force, new Vector2f(0, gravity)); // gravity
         velocity = Vector2f.add(velocity, Vector2f.divide(force, new Vector2f(mass)));
+        force = new Vector2f(0, 0);
+    }
 
-        // move the position
-        position = Vector2f.add(position, Vector2f.scale(velocity, 1));
+    public void updatePosition() {
+        this.position = Vector2f.add(position, velocity);
     }
 
     public void paint(Graphics g) {
