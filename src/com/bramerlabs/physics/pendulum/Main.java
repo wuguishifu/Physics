@@ -1,5 +1,6 @@
 package com.bramerlabs.physics.pendulum;
 
+import com.bramerlabs.engine.math.vector.Vector2f;
 import com.bramerlabs.physics.soft_bodies.Spring;
 
 import javax.swing.*;
@@ -13,6 +14,8 @@ public class Main {
     private boolean done = false, nextFrame = false;
     private int mouseX, mouseY;
     boolean mouseDown = false;
+
+    private MassPoint massPoint = new MassPoint(new Vector2f(width / 2, height / 2), 1.0f);
 
     public static void main(String[] args) {
         new Main().run();
@@ -28,6 +31,7 @@ public class Main {
             @Override
             public void paint(Graphics g) {
                 super.paint(g);
+                massPoint.paint(g);
             }
         };
         panel.setPreferredSize(new Dimension(width, height));
@@ -76,7 +80,6 @@ public class Main {
         while (!done) {
 
             panel.repaint();
-
 
 //            // update manually
 //            while (!nextFrame) {

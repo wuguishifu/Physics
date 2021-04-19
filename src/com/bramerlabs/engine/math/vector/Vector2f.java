@@ -10,6 +10,9 @@ public class Vector2f {
      */
     public float x, y;
 
+    public static final Vector2f one = new Vector2f(1, 1);
+    public static final Vector2f zero = new Vector2f(0, 0);
+
     /**
      * unit vectors in the e1 and e2 direction
      */
