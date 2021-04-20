@@ -6,17 +6,19 @@ import com.bramerlabs.physics.soft_bodies.Spring;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 @SuppressWarnings("IntegerDivisionInFloatingPointContext")
 public class Main {
 
     private final static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private final static int width = screenSize.width/2, height = screenSize.height/2;
+    private final static int width = screenSize.width, height = screenSize.height;
     private boolean done = false, nextFrame = false;
     private int mouseX, mouseY;
     boolean mouseDown = false;
 
-    private Bob Bob = new Bob(new Vector2f(width / 2 + 200, 10), new Vector2f(width / 2, 0), 1.0f);
+    public boolean fullscreen = true;
+
 
     public static void main(String[] args) {
         new Main().run();
@@ -25,14 +27,31 @@ public class Main {
     public void run() {
         // set up objects
 
+        ArrayList<DoublePendulum> dps = new ArrayList<>();
+
+        int numberOfPendulums = 10;
+        for (int i = 0; i < 25; i += 25 / numberOfPendulums) {
+//            dps.add(new DoublePendulum(height / 4 - 20f, height / 4 - 20f, 2.8f + 0.001f * i, 1.30f + 0.001f * i, 1.0f, 1.5f, new Vector2f(width/2, height/2), new Color( 10 * i, 250 - 10 * i, 100)));
+            dps.add(new DoublePendulum(height / 4 - 20f, height / 4 - 20f, 1.6f, 1.30f + 0.001f * i, 1.0f, 1.5f, new Vector2f(width/2, height/2), new Color( 10 * i, 250 - 10 * i, 100)));
+        }
+
+//        dps.add(new DoublePendulum(height / 4 - 20f, height / 4 - 20f, 1.6f, 1.30f, 1.0f, 1.5f, new Vector2f(width/2, height/2), new Color(100,  50, 100)));
+
         JFrame frame = new JFrame();
         frame.setSize(new Dimension(width, height));
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        if (fullscreen) {
+            frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            frame.setUndecorated(true);
+            frame.setVisible(true);
+        }
         JPanel panel = new JPanel() {
             @Override
             public void paint(Graphics g) {
                 super.paint(g);
-                Bob.paint(g);
+                for (DoublePendulum dp : dps) {
+                    dp.paint(g);
+                }
             }
         };
         panel.setPreferredSize(new Dimension(width, height));
@@ -75,14 +94,18 @@ public class Main {
         frame.pack();
         frame.setVisible(true);
         panel.repaint();
-        frame.move(screenSize.width/4, screenSize.height/4);
+        if (!fullscreen) {
+            frame.move(screenSize.width / 4, screenSize.height / 4);
+        }
 
         // main application loop
         while (!done) {
 
             panel.repaint();
 
-            Bob.update();
+            for (DoublePendulum dp : dps) {
+                dp.update();
+            }
 
 //            // update manually
 //            while (!nextFrame) {
