@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+@SuppressWarnings("IntegerDivisionInFloatingPointContext")
 public class Main {
 
     private final static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -15,7 +16,7 @@ public class Main {
     private int mouseX, mouseY;
     boolean mouseDown = false;
 
-    private MassPoint massPoint = new MassPoint(new Vector2f(width / 2, height / 2), 1.0f);
+    private Bob Bob = new Bob(new Vector2f(width / 2 + 200, 10), new Vector2f(width / 2, 0), 1.0f);
 
     public static void main(String[] args) {
         new Main().run();
@@ -31,7 +32,7 @@ public class Main {
             @Override
             public void paint(Graphics g) {
                 super.paint(g);
-                massPoint.paint(g);
+                Bob.paint(g);
             }
         };
         panel.setPreferredSize(new Dimension(width, height));
@@ -80,6 +81,8 @@ public class Main {
         while (!done) {
 
             panel.repaint();
+
+            Bob.update();
 
 //            // update manually
 //            while (!nextFrame) {
