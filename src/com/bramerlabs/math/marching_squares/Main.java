@@ -1,4 +1,4 @@
-package com.bramerlabs.physics.marching_squares;
+package com.bramerlabs.math.marching_squares;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,4 +1,4 @@
-package com.bramerlabs.physics.marching_cubes;
+package com.bramerlabs.math.marching_cubes;
 
 import com.bramerlabs.engine.graphics.Camera;
 import com.bramerlabs.engine.graphics.Shader;
