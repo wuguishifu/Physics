@@ -260,6 +260,16 @@ public class Vector2f {
     }
 
     /**
+     * divides the components of a vector by a value
+     * @param v - the vector
+     * @param m - the value
+     * @return - the new vector, (v.x / m, v.y / m)
+     */
+    public static Vector2f divide(Vector2f v, float m) {
+        return new Vector2f(v.x / m, v.y / m);
+    }
+
+    /**
      * divides the components of a vector by certain values
      * @param v - the vector
      * @param mx - the division factor of the x component
@@ -354,6 +364,16 @@ public class Vector2f {
      */
     public static Vector2f normalize(Vector2f v, float l) {
         return Vector2f.normalize(v).scale(l);
+    }
+
+    /**
+     * computes the distance between two vectors
+     * @param v - the first vector
+     * @param u - the second vector
+     * @return - the distance between v and u
+     */
+    public static float distance(Vector2f v, Vector2f u) {
+        return Vector2f.length(Vector2f.subtract(v, u));
     }
 
     /**

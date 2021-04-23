@@ -1,4 +1,4 @@
-package com.bramerlabs.physics.soft_bodies;
+package com.bramerlabs.physics.soft_bodies.spring;
 
 import com.bramerlabs.engine.math.vector.Vector2f;
 

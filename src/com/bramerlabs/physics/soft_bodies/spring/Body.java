@@ -1,4 +1,4 @@
-package com.bramerlabs.physics.soft_bodies;
+package com.bramerlabs.physics.soft_bodies.spring;
 
 import com.bramerlabs.engine.math.vector.Vector2f;
 
@@ -7,14 +7,14 @@ import java.util.ArrayList;
 
 public class Body {
 
-    public static final int L0 = 100;
-    public static final float ks = 300;
-    public static final float kd = 0.001f;
-    public static final float mass = 10f;
-    public static final float gravity = 0.5f;
+    public static final int L0 = 50;
+    public static final float ks = 40;
+    public static final float kd = 0.1f;
+    public static final float mass = 1f;
+    public static final float gravity = 0.35f;
 //    public static final float gravity = 0.0f;
 
-    public int numPoints = 4;
+    public int numPoints = 5;
 
     public MassPoint[][] massPoints;
     public ArrayList<Spring> springs;
@@ -28,7 +28,7 @@ public class Body {
         // generate the mass points
         for (int i = 0; i < numPoints; i++) {
             for (int j = 0; j < numPoints; j++) {
-                massPoints[i][j] = new MassPoint(new Vector2f((float) (i * L0 + position.x + 4 * Math.random()), (float) (j * L0 + position.y + 4 * Math.random())), mass);
+                massPoints[i][j] = new MassPoint(new Vector2f((float) (i * L0 + position.x + 8 * Math.random()), (float) (j * L0 + position.y + 8 * Math.random())), mass);
 //                massPoints[i][j] = new MassPoint(new Vector2f(i * L0 + position.x, j * L0 + position.y), mass);
             }
         }
@@ -79,26 +79,25 @@ public class Body {
             spring.B.updateForce(forceBA);
         }
 
-        // update the velocities
-        for (int i = 0; i < numPoints; i++) {
-            for (int j = 0; j < numPoints; j++) {
-                massPoints[i][j].updateVelocity(gravity);
-            }
-        }
-
         for (int i = 0; i < numPoints; i++) {
             for (int j = 0; j < numPoints; j++) {
                 for (Object object : objects) {
                     Vector2f[] collisionLine = object.collides(massPoints[i][j].position);
                     if (collisionLine != null) {
                         Vector2f line = Vector2f.subtract(collisionLine[1], collisionLine[0]);
-//                        System.out.println(line + ", " + massPoints[i][j].position);
                         float a = Vector2f.dot(massPoints[i][j].position, Vector2f.normalize(line));
                         Vector2f aVec = Vector2f.normalize(line, a);
                         Vector2f normal = Vector2f.normalize(Vector2f.subtract(aVec, massPoints[i][j].position));
                         massPoints[i][j].velocity = Vector2f.subtract(massPoints[i][j].velocity, Vector2f.scale(normal, 2 * Vector2f.dot(massPoints[i][j].velocity, normal)));
                     }
                 }
+            }
+        }
+
+        // update the velocities
+        for (int i = 0; i < numPoints; i++) {
+            for (int j = 0; j < numPoints; j++) {
+                massPoints[i][j].updateVelocity(gravity);
             }
         }
         // check collision between all mass points here
@@ -108,8 +107,8 @@ public class Body {
                 massPoints[i][j].updatePosition();
 
                 // this is very suboptimal -- want an equation that works with any collidable objects
-                if (massPoints[i][j].position.y > 1100) {
-                    massPoints[i][j].position.set(massPoints[i][j].position.x, 1100);
+                if (massPoints[i][j].position.y > 550) {
+                    massPoints[i][j].position.set(massPoints[i][j].position.x, 550);
                 }
             }
         }

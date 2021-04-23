@@ -1,4 +1,4 @@
-package com.bramerlabs.physics.soft_bodies;
+package com.bramerlabs.physics.soft_bodies.spring;
 
 import com.bramerlabs.engine.math.vector.Vector2f;
 
@@ -33,7 +33,7 @@ public class Spring {
         double spring = (Vector2f.length(Vector2f.subtract(B.position, A.position)) - L0) * ks;
 
         // calculate the dampening force
-        double damp = Vector2f.length(Vector2f.multiply(Vector2f.subtract(B.position, A.position), Vector2f.subtract(B.velocity, A.velocity))) * kd;
+        double damp = Vector2f.dot(Vector2f.subtract(B.position, A.position), Vector2f.subtract(B.velocity, A.velocity)) * kd;
 
         // sum
         return (float) (spring + damp);

@@ -1,56 +1,37 @@
-package com.bramerlabs.physics.pendulum;
+package com.bramerlabs.physics.soft_bodies.pressure;
 
 import com.bramerlabs.engine.math.vector.Vector2f;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 
-@SuppressWarnings({"IntegerDivisionInFloatingPointContext", "deprecation"})
 public class Main {
 
-    private final static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private final static int width = screenSize.width, height = screenSize.height;
+    private static int width = 800, height = 600;
+
     private boolean done = false, nextFrame = false;
+
+    private Body body;
+
     private int mouseX, mouseY;
     boolean mouseDown = false;
-
-    public boolean fullscreen = true;
-
 
     public static void main(String[] args) {
         new Main().run();
     }
 
     public void run() {
-        // set up objects
-
-        ArrayList<DoublePendulum> dps = new ArrayList<>();
-
-        int numberOfPendulums = 10;
-        for (int i = 0; i < 25; i += 25 / numberOfPendulums) {
-//            dps.add(new DoublePendulum(height / 4 - 20f, height / 4 - 20f, 2.8f + 0.001f * i, 1.30f + 0.001f * i, 1.0f, 1.5f, new Vector2f(width/2, height/2), new Color( 10 * i, 250 - 10 * i, 100)));
-            dps.add(new DoublePendulum(height / 4 - 20f, height / 4 - 20f, 1.6f, 1.30f + 0.001f * i, 1.0f, 1.5f, new Vector2f(width/2, height/2), new Color( 10 * i, 250 - 10 * i, 100)));
-        }
-
-//        dps.add(new DoublePendulum(height / 4 - 20f, height / 4 - 20f, 1.6f, 1.30f, 1.0f, 1.5f, new Vector2f(width/2, height/2), new Color(100,  50, 100)));
+        body = new Body(new Vector2f(width/2f, height/2f));
 
         JFrame frame = new JFrame();
         frame.setSize(new Dimension(width, height));
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        if (fullscreen) {
-            frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            frame.setUndecorated(true);
-            frame.setVisible(true);
-        }
         JPanel panel = new JPanel() {
             @Override
             public void paint(Graphics g) {
                 super.paint(g);
-                for (DoublePendulum dp : dps) {
-                    dp.paint(g);
-                }
+                body.paint(g);
             }
         };
         panel.setPreferredSize(new Dimension(width, height));
@@ -82,6 +63,8 @@ public class Main {
                     done = true;
                 } else if (keyEvent.getKeyCode() == KeyEvent.VK_SPACE) {
                     nextFrame = true;
+                } else if (keyEvent.getKeyCode() == KeyEvent.VK_A) {
+                    body.movePointsTowardsCenter();
                 }
             }
             public void keyReleased(KeyEvent keyEvent) {}
@@ -93,18 +76,12 @@ public class Main {
         frame.pack();
         frame.setVisible(true);
         panel.repaint();
-        if (!fullscreen) {
-            frame.move(screenSize.width / 4, screenSize.height / 4);
-        }
 
         // main application loop
         while (!done) {
 
             panel.repaint();
-
-            for (DoublePendulum dp : dps) {
-                dp.update();
-            }
+            body.update();
 
 //            // update manually
 //            while (!nextFrame) {
@@ -125,8 +102,8 @@ public class Main {
             }
         }
 
+        // clean up
         frame.dispose();
-
     }
 
 }
