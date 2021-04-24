@@ -326,6 +326,10 @@ public class Vector2f {
         return (float) Math.sqrt(v.x * v.x + v.y * v.y);
     }
 
+    public static float angleBetween(Vector2f v, Vector2f u) {
+        return (float) Math.acos(Vector2f.dot(Vector2f.normalize(v), Vector2f.normalize(u)) / (Vector2f.length(v) * Vector2f.length(u)));
+    }
+
     /**
      * normalizes this vector
      * @return - this vector
