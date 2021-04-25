@@ -14,14 +14,15 @@ public class Body {
     public static final float gravity = 0.35f;
 //    public static final float gravity = 0.0f;
 
-    public int numPoints = 5;
+    public int numPoints;
 
     public MassPoint[][] massPoints;
     public ArrayList<Spring> springs;
 
     // generates a body with a list of mass points and springs
     // uses a square cross hatch spring pattern in order to retain the shape of the body
-    public Body(Vector2f position) {
+    public Body(Vector2f position, int numPoints) {
+        this.numPoints = numPoints;
         massPoints = new MassPoint[numPoints][numPoints];
         springs = new ArrayList<>();
 

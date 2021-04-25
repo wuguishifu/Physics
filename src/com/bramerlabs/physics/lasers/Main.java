@@ -29,8 +29,9 @@ public class Main {
 
     public void run() {
         // set up objects
-        mirrors.add(new Mirror(new Vector2f( 100, 100), new Vector2f(1000, 600)));
-        mirrors.add(new Mirror(new Vector2f( 150, 100), new Vector2f(350, 300)));
+        mirrors.add(new Mirror(new Vector2f((float) Math.random() * width, (float) Math.random() * height), new Vector2f((float) Math.random() * width, (float) Math.random() * height)));
+        mirrors.add(new Mirror(new Vector2f((float) Math.random() * width, (float) Math.random() * height), new Vector2f((float) Math.random() * width, (float) Math.random() * height)));
+        mirrors.add(new Mirror(new Vector2f((float) Math.random() * width, (float) Math.random() * height), new Vector2f((float) Math.random() * width, (float) Math.random() * height)));
         pointer = new LaserPointer(new Vector2f(400, 400), Vector2f.e1);
 
         JFrame frame = new JFrame();

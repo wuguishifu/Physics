@@ -20,6 +20,7 @@ public class LaserPointer {
     public void paint(Graphics g, ArrayList<Mirror> mirrors, Vector2f startPosition, Vector2f startDirection) {
         Mirror intersectMirror = null;
         g.setColor(Color.RED);
+        g.drawRect((int) position.x - 5, (int) position.y - 5, 10, 10);
         float totalDistance = 0;
         Vector2f intersect = null;
         while (totalDistance < maxDistance) {
@@ -29,7 +30,7 @@ public class LaserPointer {
                 if (intersect(mirror.p1, mirror.p2, startPosition, stepVector)) {
                     intersect = calculateInterceptionPoint(mirror.p1, mirror.p2, startPosition, stepVector);
                     intersectMirror = mirror;
-                    g.drawRect((int) intersect.x - 5, (int) intersect.y - 5, 10, 10);
+//                    g.drawRect((int) intersect.x - 5, (int) intersect.y - 5, 10, 10);
                     break;
                 }
             }
@@ -44,16 +45,16 @@ public class LaserPointer {
 
             Vector2f endPoint = Vector2f.add(startPosition, Vector2f.normalize(startDirection, totalDistance));
             g.drawLine((int) startPosition.x, (int) startPosition.y, (int) endPoint.x, (int) endPoint.y);
-            g.drawRect((int) startPosition.x - 5, (int) startPosition.y - 5, 10, 10);
-            g.drawRect((int) intersect.x - 5, (int) intersect.y - 5, 10, 10);
+//            g.drawRect((int) startPosition.x - 5, (int) startPosition.y - 5, 10, 10);
+//            g.drawRect((int) intersect.x - 5, (int) intersect.y - 5, 10, 10);
 
             Vector2f newStartDirection = Vector2f.normalize(r);
             paint(g, mirrors, Vector2f.add(intersect, Vector2f.normalize(newStartDirection, stepSize)), newStartDirection);
         } else {
             Vector2f endPoint = Vector2f.add(startPosition, Vector2f.normalize(startDirection, totalDistance));
             g.drawLine((int) startPosition.x, (int) startPosition.y, (int) endPoint.x, (int) endPoint.y);
-            g.drawRect((int) startPosition.x - 5, (int) startPosition.y - 5, 10, 10);
-            g.drawRect((int) endPoint.x - 5, (int) endPoint.y - 5, 10, 10);
+//            g.drawRect((int) startPosition.x - 5, (int) startPosition.y - 5, 10, 10);
+//            g.drawRect((int) endPoint.x - 5, (int) endPoint.y - 5, 10, 10);
         }
     }
 

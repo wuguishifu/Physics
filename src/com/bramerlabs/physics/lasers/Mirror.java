@@ -18,8 +18,8 @@ public class Mirror {
     public void paint(Graphics g) {
         g.setColor(Color.BLACK);
         g.drawLine((int) p1.x, (int) p1.y, (int) p2.x, (int) p2.y);
-        g.drawRect((int) p1.x - 5, (int) p1.y - 5, 10, 10);
-        g.drawRect((int) p2.x - 5, (int) p2.y - 5, 10, 10);
+        g.drawOval((int) p1.x - 5, (int) p1.y - 5, 10, 10);
+        g.drawOval((int) p2.x - 5, (int) p2.y - 5, 10, 10);
     }
 
     public int onPoint(Vector2f p) {

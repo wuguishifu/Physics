@@ -26,7 +26,7 @@ public class Main {
 
     public void run() {
 
-        body = new Body(new Vector2f(width/4f, height/4f));
+        body = new Body(new Vector2f(width/4f, height/4f), 5);
 
         objects = new ArrayList<>();
         objects.add(new Object(new Vector2f[]{
