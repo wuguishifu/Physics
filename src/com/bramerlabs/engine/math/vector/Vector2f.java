@@ -57,6 +57,33 @@ public class Vector2f {
     }
 
     /**
+     * generates a random vector with all components between 0 and a max value
+     * @param max - the max value
+     * @return - the new vector
+     */
+    public static Vector2f random(float max) {
+        return new Vector2f((float) Math.random() * max, (float) Math.random() * max);
+    }
+
+    /**
+     * generates a random vector with all components between 0 and 1
+     * @return - the new vector
+     */
+    public static Vector2f random() {
+        return new Vector2f((float) Math.random(), (float) Math.random());
+    }
+
+    /**
+     * generates a random vector with all components between 0 and a max value
+     * @param maxX - the max x value
+     * @param maxY - the max y value
+     * @return - the new vector
+     */
+    public static Vector2f random(float maxX, float maxY) {
+        return new Vector2f((float) Math.random() * maxX, (float) Math.random() * maxY);
+    }
+
+    /**
      * sets the components of this vector
      * @param x - the new x component
      * @param y - the new y component
@@ -418,6 +445,10 @@ public class Vector2f {
      */
     public float[] toFloatArray() {
         return new float[]{x, y};
+    }
+
+    public static Vector2f center(Vector2f v, Vector2f u) {
+        return new Vector2f((v.x + u.x) / 2, (v.y + u.y) / 2);
     }
 
     /**
