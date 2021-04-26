@@ -32,19 +32,19 @@ public class Prism {
         g.drawLine((int) v2.x, (int) v2.y, (int) v3.x, (int) v3.y);
         g.drawLine((int) v3.x, (int) v3.y, (int) v1.x, (int) v1.y);
 
-//        // code for drawing normals
-//        Vector2f v12 = Vector2f.center(v1, v2);
-//        Vector2f v23 = Vector2f.center(v2, v3);
-//        Vector2f v31 = Vector2f.center(v3, v1);
-//
-//        Vector2f _n1 = Vector2f.add(v12, Vector2f.normalize(n1, 100));
-//        Vector2f _n2 = Vector2f.add(v23, Vector2f.normalize(n2, 100));
-//        Vector2f _n3 = Vector2f.add(v31, Vector2f.normalize(n3, 100));
-//
-//        g.setColor(Color.LIGHT_GRAY);
-//        g.drawLine((int) v12.x, (int) v12.y, (int) _n1.x, (int) _n1.y);
-//        g.drawLine((int) v23.x, (int) v23.y, (int) _n2.x, (int) _n2.y);
-//        g.drawLine((int) v31.x, (int) v31.y, (int) _n3.x, (int) _n3.y);
+        // code for drawing normals
+        Vector2f v12 = Vector2f.center(v1, v2);
+        Vector2f v23 = Vector2f.center(v2, v3);
+        Vector2f v31 = Vector2f.center(v3, v1);
+
+        Vector2f _n1 = Vector2f.add(v12, Vector2f.normalize(n1, 100));
+        Vector2f _n2 = Vector2f.add(v23, Vector2f.normalize(n2, 100));
+        Vector2f _n3 = Vector2f.add(v31, Vector2f.normalize(n3, 100));
+
+        g.setColor(Color.LIGHT_GRAY);
+        g.drawLine((int) v12.x, (int) v12.y, (int) _n1.x, (int) _n1.y);
+        g.drawLine((int) v23.x, (int) v23.y, (int) _n2.x, (int) _n2.y);
+        g.drawLine((int) v31.x, (int) v31.y, (int) _n3.x, (int) _n3.y);
     }
 
     public void recalculateNormals() {
