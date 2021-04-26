@@ -44,12 +44,19 @@ public class Laser {
         Vector2f negativePosition = Vector2f.add(position, Vector2f.normalize(negativeDirection, dragRadius));
         g.drawLine((int) position.x, (int) position.y, (int) negativePosition.x, (int) negativePosition.y);
         g.fillOval((int) negativePosition.x - 5, (int) negativePosition.y - 5, 10, 10);
-        g.setColor(Color.RED);
+        g.setColor(Color.WHITE);
         g.fillOval((int) position.x - 5, (int) position.y - 5, 10, 10);
-        paintLaser(g, position, direction, prism, 0);
+        paintLaser(g, position, direction, prism, 0, Color.RED, 1.00f);
+        paintLaser(g, position, direction, prism, 0, Color.ORANGE, 0.99f);
+        paintLaser(g, position, direction, prism, 0, Color.YELLOW, 0.98f);
+        paintLaser(g, position, direction, prism, 0, Color.GREEN, 0.97f);
+        paintLaser(g, position, direction, prism, 0, Color.BLUE, 0.96f);
+        paintLaser(g, position, direction, prism, 0, Color.MAGENTA, 0.95f);
+        paintLaser(g, position, direction, prism, 0, Color.WHITE, 0.95f);
     }
 
-    private void paintLaser(Graphics g, Vector2f origin, Vector2f direction, Prism prism, int depth) {
+    private void paintLaser(Graphics g, Vector2f origin, Vector2f direction, Prism prism, int depth, Color lightColor, float etaMultiplier) {
+        g.setColor(lightColor);
         float totalDistance = 0;
         int intersection = -1;
         Vector2f intersectionPoint = null;
@@ -77,7 +84,9 @@ public class Laser {
         if (intersection == -1 || depth > maxDepth) {
             Vector2f endPoint = Vector2f.add(origin, Vector2f.normalize(direction, totalDistance));
             g.drawLine((int) origin.x, (int) origin.y, (int) endPoint.x, (int) endPoint.y);
-            System.out.println();
+        } else if (lightColor == Color.WHITE) {
+            g.setColor(Color.WHITE);
+            g.drawLine((int) origin.x, (int) origin.y, (int) intersectionPoint.x, (int) intersectionPoint.y);
         } else {
             if (Vector2f.dot(direction, normal) > 0) {
                 normal = Vector2f.subtract(Vector2f.zero, normal);
@@ -85,11 +94,11 @@ public class Laser {
 //            g.setColor(Prism.insidePrism(prism, origin) ? Color.BLUE : Color.RED); // test function
             g.drawLine((int) origin.x, (int) origin.y, (int) intersectionPoint.x, (int) intersectionPoint.y);
             float dot = Vector2f.dot(normal, direction);
-            float eta = Prism.insidePrism(prism, origin) ? prism.refractionIndex : 1 / prism.refractionIndex;
+            float eta = Prism.insidePrism(prism, origin) ? prism.refractionIndex / etaMultiplier : etaMultiplier / prism.refractionIndex;
             float k = 1.0f - eta * eta * (1.0f - dot * dot);
             if (k >= 0) {
                 Vector2f newDirection = Vector2f.subtract(Vector2f.scale(direction, eta), Vector2f.scale(normal, (float) (eta * dot + Math.sqrt(k))));
-                paintLaser(g, Vector2f.add(intersectionPoint, Vector2f.normalize(newDirection, stepSize)), newDirection, prism, depth + 1);
+                paintLaser(g, Vector2f.add(intersectionPoint, Vector2f.normalize(newDirection, stepSize)), newDirection, prism, depth + 1, lightColor, etaMultiplier);
             }
         }
     }

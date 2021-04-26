@@ -11,6 +11,14 @@ public class Prism {
     public Vector2f n1, n2, n3;
     public float refractionIndex;
 
+    public static float
+        vacuum = 1.00f,
+        air = 1.0003f,
+        water = 1.33f,
+        oil = 1.46f,
+        glass = 1.50f,
+        diamond = 2.41f;
+
     public Prism(Vector2f v1, Vector2f v2, Vector2f v3, float refractionIndex) {
         this.v1 = v1;
         this.v2 = v2;
@@ -51,7 +59,7 @@ public class Prism {
     }
 
     public void paint(Graphics g) {
-        g.setColor(Color.BLACK);
+        g.setColor(Color.LIGHT_GRAY);
         g.drawLine((int) v1.x, (int) v1.y, (int) v2.x, (int) v2.y);
         g.drawLine((int) v2.x, (int) v2.y, (int) v3.x, (int) v3.y);
         g.drawLine((int) v3.x, (int) v3.y, (int) v1.x, (int) v1.y);

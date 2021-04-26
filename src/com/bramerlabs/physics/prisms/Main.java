@@ -28,7 +28,7 @@ public class Main {
     public void run() {
         // set up objects
 //        prism = new Prism(Vector2f.random(width, height), Vector2f.random(width, height), Vector2f.random(width, height), 1.0f);
-        prism = new Prism(new Vector2f(width/2f, height/2f), 300, 1.5f);
+        prism = new Prism(new Vector2f(width/2f, height/2f), 300, Prism.glass);
         laser = new Laser(new Vector2f(Vector2f.add(Vector2f.center(prism.v3, prism.v1), Vector2f.normalize(prism.n3, 100))), Vector2f.e1);
 
         JFrame frame = new JFrame();
@@ -108,6 +108,7 @@ public class Main {
         };
         panel.addMouseListener(mouseListener);
         panel.addMouseMotionListener(mouseMotionListener);
+        panel.setBackground(Color.BLACK);
         frame.addKeyListener(keyListener);
         frame.add(panel);
         frame.pack();
