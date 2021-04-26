@@ -447,8 +447,24 @@ public class Vector2f {
         return new float[]{x, y};
     }
 
+    /**
+     * determines the center point of 2 vectors
+     * @param v - the first vector
+     * @param u - the second vector
+     * @return - a vector at the center point of the two vectors
+     */
     public static Vector2f center(Vector2f v, Vector2f u) {
         return new Vector2f((v.x + u.x) / 2, (v.y + u.y) / 2);
+    }
+
+    /**
+     * calculates the determinant of 2 vectors
+     * @param v - the first vector
+     * @param u - the second vector
+     * @return - the determinant of the two vectors
+     */
+    public static float det(Vector2f v, Vector2f u) {
+        return v.x * u.y - v.y * u.x;
     }
 
     /**
