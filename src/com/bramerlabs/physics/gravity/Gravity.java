@@ -8,7 +8,7 @@ import com.bramerlabs.engine.io.window.Window;
 import com.bramerlabs.engine.math.vector.Vector3f;
 import org.lwjgl.opengl.GL46;
 
-public class Main implements Runnable {
+public class Gravity implements Runnable {
 
     private final Input input = new Input();
     private final Window window = new Window(input);
@@ -19,7 +19,7 @@ public class Main implements Runnable {
     private Body[] p;
 
     public static void main(String[] args) {
-        new Main().start();
+        new Gravity().start();
     }
 
     public void start() {

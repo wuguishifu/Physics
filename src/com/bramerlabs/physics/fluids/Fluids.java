@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Rectangle2D;
 
-public class Main {
+public class Fluids {
 
     // the data regarding the fluid screen
     int size = 32, boxSize = 32;
@@ -26,7 +26,7 @@ public class Main {
     boolean done = false;
 
     public static void main(String[] args) {
-        new Main().run();
+        new Fluids().run();
     }
 
     public void run() {

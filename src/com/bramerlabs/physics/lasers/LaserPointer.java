@@ -9,7 +9,7 @@ public class LaserPointer {
 
     public Vector2f position;
     public Vector2f direction;
-    public int maxDistance = (int) Math.sqrt(Main.width * Main.width + Main.height * Main.height) + 100;
+    public int maxDistance = (int) Math.sqrt(Lasers.width * Lasers.width + Lasers.height * Lasers.height) + 100;
     public float stepSize = 0.1f;
 
     public LaserPointer(Vector2f position, Vector2f direction) {

@@ -1,38 +1,28 @@
-package com.bramerlabs.physics.soft_bodies.spring;
+package com.bramerlabs.physics.soft_bodies.pressure;
 
 import com.bramerlabs.engine.math.vector.Vector2f;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 
-public class Main {
+public class PressureBody {
 
-    private final static int width = 800, height = 600;
-
-    private Body body;
+    private static int width = 800, height = 600;
 
     private boolean done = false, nextFrame = false;
+
+    private Body body;
 
     private int mouseX, mouseY;
     boolean mouseDown = false;
 
-    private ArrayList<Object> objects;
-
     public static void main(String[] args) {
-        new Main().run();
+        new PressureBody().run();
     }
 
     public void run() {
-
-        body = new Body(new Vector2f(width/4f, height/4f), 5);
-
-        objects = new ArrayList<>();
-        objects.add(new Object(new Vector2f[]{
-                new Vector2f(0, 550),
-                new Vector2f(1600, 550),
-        }));
+        body = new Body(new Vector2f(width/2f, height/2f));
 
         JFrame frame = new JFrame();
         frame.setSize(new Dimension(width, height));
@@ -41,9 +31,6 @@ public class Main {
             @Override
             public void paint(Graphics g) {
                 super.paint(g);
-                for (Object object : objects) {
-                    object.paint(g);
-                }
                 body.paint(g);
             }
         };
@@ -77,9 +64,7 @@ public class Main {
                 } else if (keyEvent.getKeyCode() == KeyEvent.VK_SPACE) {
                     nextFrame = true;
                 } else if (keyEvent.getKeyCode() == KeyEvent.VK_A) {
-                    for (Spring spring : body.springs) {
-                        spring.L0 += 1.0f;
-                    }
+                    body.movePointsTowardsCenter();
                 }
             }
             public void keyReleased(KeyEvent keyEvent) {}
@@ -95,9 +80,8 @@ public class Main {
         // main application loop
         while (!done) {
 
-            body.update(objects);
             panel.repaint();
-
+            body.update();
 
 //            // update manually
 //            while (!nextFrame) {
@@ -118,8 +102,8 @@ public class Main {
             }
         }
 
+        // clean up
         frame.dispose();
-
     }
 
 }

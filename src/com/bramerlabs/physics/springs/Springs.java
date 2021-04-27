@@ -1,56 +1,50 @@
-package com.bramerlabs.physics.pendulum;
+package com.bramerlabs.physics.springs;
 
 import com.bramerlabs.engine.math.vector.Vector2f;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 
-@SuppressWarnings({"IntegerDivisionInFloatingPointContext", "deprecation"})
-public class Main {
+public class Springs {
 
-    private final static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private final static int width = screenSize.width, height = screenSize.height;
+    private final static int width = 800, height = 600;
+
     private boolean done = false, nextFrame = false;
+
+    int connectionPointRadius = 25;
+    private Vector2f connectionPoint;
+    private Mass mass;
+    private Spring spring;
+
     private int mouseX, mouseY;
     boolean mouseDown = false;
 
-    public boolean fullscreen = true;
-
-
     public static void main(String[] args) {
-        new Main().run();
+        new Springs().run();
     }
 
     public void run() {
-        // set up objects
-
-        ArrayList<DoublePendulum> dps = new ArrayList<>();
-
-        int numberOfPendulums = 10;
-        for (int i = 0; i < 25; i += 25 / numberOfPendulums) {
-//            dps.add(new DoublePendulum(height / 4 - 20f, height / 4 - 20f, 2.8f + 0.001f * i, 1.30f + 0.001f * i, 1.0f, 1.5f, new Vector2f(width/2, height/2), new Color( 10 * i, 250 - 10 * i, 100)));
-            dps.add(new DoublePendulum(height / 4 - 20f, height / 4 - 20f, 1.6f, 1.30f + 0.001f * i, 1.0f, 1.5f, new Vector2f(width/2, height/2), new Color( 10 * i, 250 - 10 * i, 100)));
-        }
-
-//        dps.add(new DoublePendulum(height / 4 - 20f, height / 4 - 20f, 1.6f, 1.30f, 1.0f, 1.5f, new Vector2f(width/2, height/2), new Color(100,  50, 100)));
+        connectionPoint = new Vector2f(width / 2f, height / 2f);
+        mass = new Mass(new Vector2f(width / 2f + 100, height / 2f), 10.0f);
+        spring = new Spring(connectionPoint, mass, Vector2f.length(Vector2f.subtract(connectionPoint, mass.position)), 10.0f, 0.1f);
+        mass.position = Vector2f.add(mass.position, new Vector2f(50, 0));
 
         JFrame frame = new JFrame();
         frame.setSize(new Dimension(width, height));
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        if (fullscreen) {
-            frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            frame.setUndecorated(true);
-            frame.setVisible(true);
-        }
         JPanel panel = new JPanel() {
             @Override
             public void paint(Graphics g) {
                 super.paint(g);
-                for (DoublePendulum dp : dps) {
-                    dp.paint(g);
-                }
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setStroke(new BasicStroke(2));
+                spring.paint(g);
+                g.setColor(new Color(170, 170, 170));
+                g.fillRect((int) (connectionPoint.x - connectionPointRadius), (int) (connectionPoint.y - connectionPointRadius), 2 * connectionPointRadius, 2 * connectionPointRadius);
+                g.setColor(new Color(88, 88, 88));
+                g.drawRect((int) (connectionPoint.x - connectionPointRadius), (int) (connectionPoint.y - connectionPointRadius), 2 * connectionPointRadius, 2 * connectionPointRadius);
+                mass.paint(g);
             }
         };
         panel.setPreferredSize(new Dimension(width, height));
@@ -93,18 +87,21 @@ public class Main {
         frame.pack();
         frame.setVisible(true);
         panel.repaint();
-        if (!fullscreen) {
-            frame.move(screenSize.width / 4, screenSize.height / 4);
-        }
 
         // main application loop
         while (!done) {
 
             panel.repaint();
+            this.updateForce();
 
-            for (DoublePendulum dp : dps) {
-                dp.update();
+            if (previousMassPosition2.x > previousMassPosition1.x && mass.position.x > previousMassPosition1.x) {
+                System.out.println(previousMassPosition1);
+            } else if (previousMassPosition2.x < previousMassPosition1.x && mass.position.x < previousMassPosition1.x) {
+                System.out.println(previousMassPosition1);
             }
+            previousMassPosition2 = previousMassPosition1;
+            previousMassPosition1 = mass.position;
+
 
 //            // update manually
 //            while (!nextFrame) {
@@ -125,8 +122,20 @@ public class Main {
             }
         }
 
+        // clean up
         frame.dispose();
+    }
 
+    Vector2f previousMassPosition1 = Vector2f.zero;
+    Vector2f previousMassPosition2 = Vector2f.zero;
+
+    private void updateForce() {
+        Vector2f directionNormal = Vector2f.normalize(Vector2f.subtract(connectionPoint, mass.position));
+        float forceMagnitude = 0.001f * spring.calculateForce();
+        Vector2f force = Vector2f.normalize(directionNormal, forceMagnitude);
+        mass.updateForce(force);
+        mass.updateVelocity();
+        mass.updatePosition();
     }
 
 }

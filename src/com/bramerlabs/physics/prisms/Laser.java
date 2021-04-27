@@ -12,7 +12,7 @@ public class Laser {
     public int dragRadius = 100;
     public int maxDepth = 100;
 
-    public int maxDistance = (int) Math.sqrt(Main.width * Main.width + Main.height * Main.height);
+    public int maxDistance = (int) Math.sqrt(Prisms.width * Prisms.width + Prisms.height * Prisms.height);
     public float stepSize = 0.1f;
 
     public Laser(Vector2f position, Vector2f direction) {
