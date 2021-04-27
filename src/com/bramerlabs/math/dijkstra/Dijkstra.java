@@ -8,7 +8,7 @@ import java.awt.event.*;
 
 public class Dijkstra {
 
-    protected final static int CELL_SIZE = 30;
+    protected final static int CELL_SIZE = 40;
     protected final static int CELLS_HORIZONTAL = 40;
     protected final static int CELLS_VERTICAL = 30;
     protected final static int WIDTH = CELLS_HORIZONTAL * CELL_SIZE;
@@ -83,7 +83,7 @@ public class Dijkstra {
                 currentMousePosition = new Vector2f(mouseEvent.getX(), mouseEvent.getY());
                 if (buttonDown == MouseEvent.BUTTON1) {
                     if ((int) currentMousePosition.x / CELL_SIZE != (int) initialMousePosition.x / CELL_SIZE || (int) currentMousePosition.y / CELL_SIZE != (int) initialMousePosition.y / CELL_SIZE) {
-                        if (keyDown == KeyEvent.VK_B) {
+                        if (keyDown == KeyEvent.VK_S) {
                             grid.setTempCellsSquare(initialMousePosition, currentMousePosition);
                         } else {
                             grid.setTempCells(initialMousePosition, currentMousePosition, true);
@@ -108,6 +108,8 @@ public class Dijkstra {
                         grid.findPath(); break;
                     case KeyEvent.VK_C:
                         System.out.println(grid.containsStart + ", " + grid.containsEnd); break;
+                    case KeyEvent.VK_P:
+                        grid.printGrid(); break;
                 }
                 keyDown = keyEvent.getKeyCode();
             }

@@ -1,15 +1,19 @@
 package com.bramerlabs.math.dijkstra;
 
+import com.bramerlabs.engine.math.noise.Noise;
+import com.bramerlabs.engine.math.noise.SimplexNoise;
+import com.bramerlabs.engine.math.noise.SimplexNoiseOctave;
 import com.bramerlabs.engine.math.vector.Vector2f;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
 
 public class Grid {
 
     public int cellsHorizontal, cellsVertical, cellSize;
     public int[][] cells;
     public int[][] tempCells;
+    public int[][] bfs;
+    public int[][] path;
 
     public boolean containsStart = false, containsEnd = false;
     public int[] start, end;
@@ -36,17 +40,136 @@ public class Grid {
             }
         }
 
+        this.bfs = new int[cellsHorizontal][cellsVertical];
+        for (int i = 0; i < cellsHorizontal; i++) {
+            for (int j = 0; j < cellsVertical; j++) {
+                bfs[i][j] = cellsVertical * cellsHorizontal + 1;
+            }
+        }
+
+        this.path = new int[cellsHorizontal][cellsVertical];
+        for (int i = 0; i < cellsHorizontal; i++) {
+            for (int j = 0; j < cellsVertical; j++) {
+                path[i][j] = cellsVertical * cellsHorizontal + 1;
+            }
+        }
+
         start = new int[2];
         end = new int[2];
     }
 
     public void findPath() {
+        this.bfs = new int[cellsHorizontal][cellsVertical];
+        for (int i = 0; i < cellsHorizontal; i++) {
+            for (int j = 0; j < cellsVertical; j++) {
+                bfs[i][j] = cellsVertical * cellsHorizontal + 1;
+            }
+        }
+
+        this.path = new int[cellsHorizontal][cellsVertical];
+        for (int i = 0; i < cellsHorizontal; i++) {
+            for (int j = 0; j < cellsVertical; j++) {
+                path[i][j] = cellsVertical * cellsHorizontal + 1;
+            }
+        }
+
+        clearCells(4);
+
         if (!(containsEnd && containsStart)) {
             return;
         }
 
         // do the algorithm here
+        for (int i = 0; i < cellsHorizontal; i++) {
+            for (int j = 0; j < cellsVertical; j++) {
+                if (cells[i][j] == 1) {
+                    bfs[i][j] = 1000;
+                }
+            }
+        }
+        bfs(start[0], start[1], 0);
+        addSmallestDelta(end[0], end[1]);
+        for (int i = 0; i < cellsHorizontal; i++) {
+            for (int j = 0; j < cellsVertical; j++) {
+                if (path[i][j] == 1 && cells[i][j] == -1) {
+                    cells[i][j] = 4;
+                }
+            }
+        }
 
+    }
+
+    private void addSmallestDelta(int curX, int curY) {
+        if (curX == start[0] && curY == start[1]) {
+            return;
+        }
+        if (curX - 1 >= 0 && curX + 1 < cellsHorizontal && curY - 1 >= 0 && curY + 1 <= cellsVertical) {
+            int smallX = -1;
+            int smallY = -1;
+            int smallestValue = cellsHorizontal * cellsVertical;
+            if (bfs[curX - 1][curY] < smallestValue) {
+                smallX = curX - 1;
+                smallY = curY;
+                smallestValue = bfs[curX - 1][curY];
+            }
+            if (bfs[curX - 1][curY - 1] < smallestValue) {
+                smallX = curX - 1;
+                smallY = curY - 1;
+                smallestValue = bfs[curX - 1][curY - 1];
+            }
+            if (bfs[curX][curY - 1] < smallestValue) {
+                smallX = curX;
+                smallY = curY - 1;
+                smallestValue = bfs[curX][curY - 1];
+            }
+            if (bfs[curX + 1][curY - 1] < smallestValue) {
+                smallX = curX + 1;
+                smallY = curY - 1;
+                smallestValue = bfs[curX + 1][curY - 1];
+            }
+            if (bfs[curX + 1][curY] < smallestValue) {
+                smallX = curX + 1;
+                smallY = curY;
+                smallestValue = bfs[curX + 1][curY];
+            }
+            if (bfs[curX + 1][curY + 1] < smallestValue) {
+                smallX = curX + 1;
+                smallY = curY + 1;
+                smallestValue = bfs[curX + 1][curY + 1];
+            }
+            if (bfs[curX][curY + 1] < smallestValue) {
+                smallX = curX;
+                smallY = curY + 1;
+                smallestValue = bfs[curX][curY + 1];
+            }
+            if (bfs[curX - 1][curY + 1] < smallestValue) {
+                smallX = curX - 1;
+                smallY = curY + 1;
+                smallestValue = bfs[curX - 1][curY + 1];
+            }
+            path[smallX][smallY] = 1;
+            addSmallestDelta(smallX, smallY);
+        }
+    }
+
+    private void bfs(int curX, int curY, int depth) {
+        if (curX >= cellsHorizontal || curX < 0 || curY < 0 || curY >= cellsVertical) {
+            return;
+        }
+        if (bfs[curX][curY] == 1000) {
+            return;
+        }
+        if (bfs[curX][curY] != -1) {
+            if (bfs[curX][curY] > depth) {
+                bfs[curX][curY] = depth;
+            } else {
+                return;
+            }
+        }
+        bfs(curX + 1, curY, depth + 1);
+        bfs(curX, curY + 1, depth + 1);
+        bfs(curX - 1, curY, depth + 1);
+        bfs(curX, curY - 1, depth + 1);
     }
 
     public void setTempCellsSquare(Vector2f p1, Vector2f p2) {
@@ -171,6 +294,10 @@ public class Grid {
                         g.setColor(Color.RED);
                         g.fillRect(i * cellSize, j * cellSize, cellSize, cellSize);
                         break;
+                    case 4:
+                        g.setColor(Color.GREEN);
+                        g.fillRect(i * cellSize, j * cellSize, cellSize, cellSize);
+                        break;
                 }
             }
         }
@@ -191,6 +318,27 @@ public class Grid {
         }
         for (int i = 0; i < cellsVertical; i++) {
             g.drawLine(0, i * cellSize, cellsHorizontal * cellSize, i * cellSize);
+        }
+    }
+
+    public void printGrid() {
+        bfs(start[0], start[1], 0);
+        for (int i = 0; i < cellsHorizontal; i++) {
+            for (int j = 0; j < cellsVertical; j++) {
+                if (cells[i][j] == 1) {
+                    bfs[i][j] = 1000;
+                }
+            }
+        }
+        for (int j = 0; j < cellsVertical; j++) {
+            for (int i = 0; i < cellsHorizontal; i++) {
+                if (bfs[i][j] == 1000) {
+                    System.out.print("--" + "\t");
+                } else {
+                    System.out.print(bfs[i][j] + "\t");
+                }
+            }
+            System.out.println();
         }
     }
 }
