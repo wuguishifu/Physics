@@ -19,6 +19,8 @@ public class Dijkstra {
     private int keyDown = -1;
     private int buttonDown = -1;
 
+    private boolean useCorners = false;
+
     private boolean done = false, nextFrame = false, mouseDown = false;
 
     public Grid grid;
@@ -105,11 +107,13 @@ public class Dijkstra {
                     case KeyEvent.VK_SPACE:
                         nextFrame = true; break;
                     case KeyEvent.VK_ENTER:
-                        grid.findPath(); break;
+                        grid.findPath(useCorners); break;
                     case KeyEvent.VK_C:
                         System.out.println(grid.containsStart + ", " + grid.containsEnd); break;
                     case KeyEvent.VK_P:
                         grid.printGrid(); break;
+                    case KeyEvent.VK_A:
+                        useCorners = !useCorners;
                 }
                 keyDown = keyEvent.getKeyCode();
             }

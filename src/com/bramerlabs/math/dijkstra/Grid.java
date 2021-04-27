@@ -55,7 +55,7 @@ public class Grid {
         end = new int[2];
     }
 
-    public void findPath() {
+    public void findPath(boolean useCorners) {
         this.bfs = new int[cellsHorizontal][cellsVertical];
         for (int i = 0; i < cellsHorizontal; i++) {
             for (int j = 0; j < cellsVertical; j++) {
@@ -85,7 +85,7 @@ public class Grid {
             }
         }
         bfs(start[0], start[1], 0);
-        addSmallestDelta(end[0], end[1]);
+        addSmallestDelta(end[0], end[1], useCorners);
         for (int i = 0; i < cellsHorizontal; i++) {
             for (int j = 0; j < cellsVertical; j++) {
                 if (path[i][j] == 1 && cells[i][j] == -1) {
@@ -96,7 +96,7 @@ public class Grid {
 
     }
 
-    private void addSmallestDelta(int curX, int curY) {
+    private void addSmallestDelta(int curX, int curY, boolean useCorners) {
         if (curX == start[0] && curY == start[1]) {
             return;
         }
@@ -109,42 +109,44 @@ public class Grid {
                 smallY = curY;
                 smallestValue = bfs[curX - 1][curY];
             }
-            if (bfs[curX - 1][curY - 1] < smallestValue) {
-                smallX = curX - 1;
-                smallY = curY - 1;
-                smallestValue = bfs[curX - 1][curY - 1];
-            }
             if (bfs[curX][curY - 1] < smallestValue) {
                 smallX = curX;
                 smallY = curY - 1;
                 smallestValue = bfs[curX][curY - 1];
-            }
-            if (bfs[curX + 1][curY - 1] < smallestValue) {
-                smallX = curX + 1;
-                smallY = curY - 1;
-                smallestValue = bfs[curX + 1][curY - 1];
             }
             if (bfs[curX + 1][curY] < smallestValue) {
                 smallX = curX + 1;
                 smallY = curY;
                 smallestValue = bfs[curX + 1][curY];
             }
-            if (bfs[curX + 1][curY + 1] < smallestValue) {
-                smallX = curX + 1;
-                smallY = curY + 1;
-                smallestValue = bfs[curX + 1][curY + 1];
-            }
             if (bfs[curX][curY + 1] < smallestValue) {
                 smallX = curX;
                 smallY = curY + 1;
                 smallestValue = bfs[curX][curY + 1];
             }
-            if (bfs[curX - 1][curY + 1] < smallestValue) {
-                smallX = curX - 1;
-                smallY = curY + 1;
+            if (useCorners) {
+                if (bfs[curX - 1][curY - 1] < smallestValue) {
+                    smallX = curX - 1;
+                    smallY = curY - 1;
+                    smallestValue = bfs[curX - 1][curY - 1];
+                }
+                if (bfs[curX + 1][curY - 1] < smallestValue) {
+                    smallX = curX + 1;
+                    smallY = curY - 1;
+                    smallestValue = bfs[curX + 1][curY - 1];
+                }
+                if (bfs[curX + 1][curY + 1] < smallestValue) {
+                    smallX = curX + 1;
+                    smallY = curY + 1;
+                    smallestValue = bfs[curX + 1][curY + 1];
+                }
+                if (bfs[curX - 1][curY + 1] < smallestValue) {
+                    smallX = curX - 1;
+                    smallY = curY + 1;
+                }
             }
             path[smallX][smallY] = 1;
-            addSmallestDelta(smallX, smallY);
+            addSmallestDelta(smallX, smallY, useCorners);
         }
     }
 
