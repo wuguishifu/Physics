@@ -1,8 +1,5 @@
 package com.bramerlabs.math.dijkstra;
 
-import com.bramerlabs.engine.math.noise.Noise;
-import com.bramerlabs.engine.math.noise.SimplexNoise;
-import com.bramerlabs.engine.math.noise.SimplexNoiseOctave;
 import com.bramerlabs.engine.math.vector.Vector2f;
 
 import java.awt.*;
@@ -145,7 +142,6 @@ public class Grid {
             if (bfs[curX - 1][curY + 1] < smallestValue) {
                 smallX = curX - 1;
                 smallY = curY + 1;
-                smallestValue = bfs[curX - 1][curY + 1];
             }
             path[smallX][smallY] = 1;
             addSmallestDelta(smallX, smallY);
