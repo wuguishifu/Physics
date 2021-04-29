@@ -30,6 +30,12 @@ public class Grid {
             }
         }
 
+        for (int i = 0; i < cellsHorizontal; i++) {
+            for (int j = 0; j < cellsVertical; j++) {
+                cells[i][j] = Math.random() < 0.2 ? 1 : -1;
+            }
+        }
+
         this.tempCells = new int[cellsHorizontal][cellsVertical];
         for (int i = 0; i < cellsHorizontal; i++) {
             for (int j = 0; j < cellsVertical; j++) {
