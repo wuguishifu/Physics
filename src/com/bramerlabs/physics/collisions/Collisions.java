@@ -20,9 +20,20 @@ public class Collisions {
         new Collisions().run();
     }
 
+    private Vector2f initialPosition, direction;
+
+    private Ball ball = null;
+
+    private int mouseDown = -1;
+
     private void run() {
         // set up objects
         objects.add(new CollidableObject(100, 100, 100, 100));
+        for (int i = 0; i < 20; i++) {
+            objects.add(new CollidableObject(WIDTH * Math.random(), HEIGHT * Math.random(), 500 * Math.random(), 500 * Math.random()));
+        }
+        initialPosition = Vector2f.zero;
+        direction = Vector2f.zero;
 
         JFrame frame = new JFrame();
         frame.setSize(new Dimension(WIDTH, HEIGHT));
@@ -32,20 +43,43 @@ public class Collisions {
             public void paint(Graphics g) {
                 super.paint(g);
                 for (CollidableObject object : objects) {
+                    Graphics2D g2d = (Graphics2D) g;
+                    g2d.setStroke(new BasicStroke(2));
                     object.paint(g);
+                    g.setColor(new Color(196, 196, 196));
+                    g.fillOval((int) initialPosition.x - 5, (int) initialPosition.y - 5, 10, 10);
+                    g.drawLine((int) initialPosition.x, (int) initialPosition.y, (int) direction.x + (int) initialPosition.x, (int) direction.y + (int) initialPosition.y);
+                    if (ball != null) {
+                        ball.paint(g);
+                    }
                 }
             }
         };
         panel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         MouseListener mouseListener = new MouseListener() {
             public void mouseClicked(MouseEvent mouseEvent) {}
-            public void mousePressed(MouseEvent mouseEvent) {}
-            public void mouseReleased(MouseEvent mouseEvent) {}
+            public void mousePressed(MouseEvent mouseEvent) {
+                mouseDown = mouseEvent.getButton();
+                if (mouseDown == MouseEvent.BUTTON1) {
+                    initialPosition = new Vector2f(mouseEvent.getX(), mouseEvent.getY());
+                }
+            }
+            public void mouseReleased(MouseEvent mouseEvent) {
+                if (mouseDown == MouseEvent.BUTTON1) {
+                    direction = Vector2f.subtract(initialPosition, mouseEvent.getX(), mouseEvent.getY());
+                    ball = new Ball(initialPosition, direction);
+                }
+                mouseDown = -1;
+            }
             public void mouseEntered(MouseEvent mouseEvent) {}
             public void mouseExited(MouseEvent mouseEvent) {}
         };
         MouseMotionListener mouseMotionListener = new MouseMotionListener() {
-            public void mouseDragged(MouseEvent mouseEvent) {}
+            public void mouseDragged(MouseEvent mouseEvent) {
+                if (mouseDown == MouseEvent.BUTTON1) {
+                    direction = Vector2f.subtract(initialPosition, mouseEvent.getX(), mouseEvent.getY());
+                }
+            }
             public void mouseMoved(MouseEvent mouseEvent) {}
         };
         KeyListener keyListener = new KeyListener() {
@@ -69,6 +103,9 @@ public class Collisions {
         // main application loop
         while (!done) {
             panel.repaint();
+            if (ball != null) {
+                ball.update(objects);
+            }
             try {
                 Thread.sleep(20);
             } catch (InterruptedException e) {

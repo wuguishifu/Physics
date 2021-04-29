@@ -18,6 +18,13 @@ public class CollidableObject {
         this.h = h;
     }
 
+    public CollidableObject(double x, double y, double w, double h) {
+        this.x = (int) x;
+        this.y = (int) y;
+        this.w = (int) w;
+        this.h = (int) h;
+    }
+
     public boolean collides(Vector2f p) {
         return p.x <= x + w && p.x >= x && p.y <= y + h && p.y >= y;
     }
