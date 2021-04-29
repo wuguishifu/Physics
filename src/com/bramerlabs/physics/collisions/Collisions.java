@@ -85,10 +85,8 @@ public class Collisions {
         KeyListener keyListener = new KeyListener() {
             public void keyTyped(KeyEvent keyEvent) {}
             public void keyPressed(KeyEvent keyEvent) {
-                switch (keyEvent.getKeyCode()) {
-                    case KeyEvent.VK_ESCAPE:
-                        done = true;
-                        break;
+                if (keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    done = true;
                 }
             }
             public void keyReleased(KeyEvent keyEvent) {}
