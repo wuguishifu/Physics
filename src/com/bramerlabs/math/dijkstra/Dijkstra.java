@@ -43,7 +43,6 @@ public class Dijkstra {
             public void paint(Graphics g) {
                 super.paint(g);
                 grid.paint(g);
-//                g.drawLine((int) initialMousePosition.x, (int) initialMousePosition.y, (int) currentMousePosition.x, (int) currentMousePosition.y);
             }
         };
 
@@ -110,8 +109,6 @@ public class Dijkstra {
                         grid.findPath(useCorners); break;
                     case KeyEvent.VK_C:
                         System.out.println(grid.containsStart + ", " + grid.containsEnd); break;
-                    case KeyEvent.VK_P:
-                        grid.printGrid(); break;
                     case KeyEvent.VK_A:
                         useCorners = !useCorners;
                 }

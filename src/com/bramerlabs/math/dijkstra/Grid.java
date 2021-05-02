@@ -324,25 +324,4 @@ public class Grid {
             g.drawLine(0, i * cellSize, cellsHorizontal * cellSize, i * cellSize);
         }
     }
-
-    public void printGrid() {
-        bfs(start[0], start[1], 0);
-        for (int i = 0; i < cellsHorizontal; i++) {
-            for (int j = 0; j < cellsVertical; j++) {
-                if (cells[i][j] == 1) {
-                    bfs[i][j] = 1000;
-                }
-            }
-        }
-        for (int j = 0; j < cellsVertical; j++) {
-            for (int i = 0; i < cellsHorizontal; i++) {
-                if (bfs[i][j] == 1000) {
-                    System.out.print("--" + "\t");
-                } else {
-                    System.out.print(bfs[i][j] + "\t");
-                }
-            }
-            System.out.println();
-        }
-    }
 }
