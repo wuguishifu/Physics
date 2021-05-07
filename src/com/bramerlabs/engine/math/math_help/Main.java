@@ -27,8 +27,8 @@ public class Main {
         return new Vector2f((float) ((b2 * c1 - b1 * c2) / delta), (float) ((a1 * c2 - a2 * c1) / delta));
     }
 
-    public static Vector2f reflectVector2f(Vector2f v1, Vector2f v2) {
-        return null;
+    public static Vector2f reflectVector2f(Vector2f v, Vector2f n) {
+        return Vector2f.subtract(v, Vector2f.scale(n, 2 * Vector2f.dot(v, n)));
     }
 
 }
