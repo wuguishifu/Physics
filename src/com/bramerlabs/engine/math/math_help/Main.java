@@ -31,4 +31,8 @@ public class Main {
         return Vector2f.subtract(v, Vector2f.scale(n, 2 * Vector2f.dot(v, n)));
     }
 
+    public static Vector2f projection(Vector2f v, Vector2f a) {
+        return null;
+    }
+
 }
