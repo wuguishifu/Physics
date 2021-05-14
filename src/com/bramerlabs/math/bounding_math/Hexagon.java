@@ -33,11 +33,11 @@ public class Hexagon {
 
     public boolean checkCollision(float mouseX, float mouseY) {
         Vector2f mouseLoc = new Vector2f(mouseX, mouseY);
-        return !(Vector2f.distance(mouseLoc, position) < triangleHeight);
+        return (Vector2f.distance(mouseLoc, position) < triangleHeight);
     }
 
     public void paint(Graphics g) {
-        g.setColor(isSelected ? Color.BLUE : Color.RED);
+        g.setColor(isSelected ? Color.RED : Color.BLUE);
         for (int i = 0; i < hexCornerPoints.length - 1; i++) {
             Vector2f point1 = Vector2f.add(Vector2f.normalize(new Vector2f(hexCornerPoints[i].x, hexCornerPoints[i].z), radius), position);
             Vector2f point2 = Vector2f.add(Vector2f.normalize(new Vector2f(hexCornerPoints[i + 1].x, hexCornerPoints[i + 1].z), radius), position);
