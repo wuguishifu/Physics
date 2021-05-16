@@ -33,7 +33,7 @@ public class Hexagon {
 
     public boolean checkCollision(float mouseX, float mouseY) {
         Vector2f mouseLoc = new Vector2f(mouseX, mouseY);
-        return (Vector2f.distance(mouseLoc, position) < triangleHeight);
+        return !(Vector2f.distance(mouseLoc, position) < triangleHeight);
     }
 
     public void paint(Graphics g) {
