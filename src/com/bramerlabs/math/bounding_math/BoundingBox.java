@@ -25,6 +25,7 @@ public class BoundingBox {
         // set up objects
         Hexagon hexagon = new Hexagon(new Vector2f(screenSize.width/2f, screenSize.height/2f));
         Rectangle rectangle = new Rectangle(200, 200, 400, 250, false);
+        Circle circle = new Circle(500, 700, 40);
 
         JFrame frame = new JFrame();
         frame.setSize(new Dimension(width, height));
@@ -40,6 +41,7 @@ public class BoundingBox {
                 super.paint(g);
                 hexagon.paint(g);
                 rectangle.paint(g);
+                circle.paint(g);
             }
         };
         panel.setPreferredSize(new Dimension(width, height));
@@ -92,6 +94,7 @@ public class BoundingBox {
 
             hexagon.isSelected = hexagon.checkCollision(mouseX, mouseY);
             rectangle.isSelected = rectangle.checkCollision(mouseX, mouseY);
+            circle.isSelected = circle.checkCollision(mouseX, mouseY);
 
             panel.repaint();
 
