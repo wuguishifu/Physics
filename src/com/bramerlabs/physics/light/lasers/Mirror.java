@@ -1,4 +1,4 @@
-package com.bramerlabs.physics.lasers;
+package com.bramerlabs.physics.light.lasers;
 
 import com.bramerlabs.engine.math.vector.Vector2f;
 

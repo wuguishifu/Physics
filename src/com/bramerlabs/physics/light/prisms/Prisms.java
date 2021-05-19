@@ -1,14 +1,13 @@
-package com.bramerlabs.physics.lasers;
+package com.bramerlabs.physics.light.prisms;
 
 import com.bramerlabs.engine.math.vector.Vector2f;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 
 @SuppressWarnings({"deprecation"})
-public class Lasers {
+public class Prisms {
 
     protected final static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     protected final static int width = screenSize.width, height = screenSize.height;
@@ -17,22 +16,20 @@ public class Lasers {
     private boolean mouseDown = false;
 
     private static boolean fullscreen = true;
+    private boolean onRadius = false, onPoint = false;
 
-    private ArrayList<Mirror> mirrors = new ArrayList<>();
-    private LaserPointer pointer;
-    private Mirror selectedMirror;
-    private int selectedPosition;
+    private Prism prism;
+    private Laser laser;
 
     public static void main(String[] args) {
-        new Lasers().run();
+        new Prisms().run();
     }
 
     public void run() {
         // set up objects
-        mirrors.add(new Mirror(new Vector2f((float) Math.random() * width, (float) Math.random() * height), new Vector2f((float) Math.random() * width, (float) Math.random() * height)));
-        mirrors.add(new Mirror(new Vector2f((float) Math.random() * width, (float) Math.random() * height), new Vector2f((float) Math.random() * width, (float) Math.random() * height)));
-        mirrors.add(new Mirror(new Vector2f((float) Math.random() * width, (float) Math.random() * height), new Vector2f((float) Math.random() * width, (float) Math.random() * height)));
-        pointer = new LaserPointer(new Vector2f(400, 400), Vector2f.e1);
+//        prism = new Prism(Vector2f.random(width, height), Vector2f.random(width, height), Vector2f.random(width, height), 1.0f);
+        prism = new Prism(new Vector2f(width/2f, height/2f), 300, Prism.glass);
+        laser = new Laser(new Vector2f(Vector2f.add(Vector2f.center(prism.v3, prism.v1), Vector2f.normalize(prism.n3, 100))), new Vector2f((float) Math.cos(Math.toRadians(-20)), (float) Math.sin(Math.toRadians(-20))));
 
         JFrame frame = new JFrame();
         frame.setSize(new Dimension(width, height));
@@ -48,10 +45,8 @@ public class Lasers {
                 super.paint(g);
                 Graphics2D g2d = (Graphics2D) g;
                 g2d.setStroke(new BasicStroke(2));
-                pointer.paint(g, mirrors, pointer.position, pointer.direction);
-                for (Mirror mirror : mirrors) {
-                    mirror.paint(g);
-                }
+                prism.paint(g);
+                laser.paint(g, prism);
             }
         };
         panel.setPreferredSize(new Dimension(width, height));
@@ -60,32 +55,20 @@ public class Lasers {
             public void mousePressed(MouseEvent mouseEvent) {
                 if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
                     mouseDown = true;
-                }
-                for (Mirror mirror : mirrors) {
-                    if (mirror.onPoint(new Vector2f(mouseEvent.getX(), mouseEvent.getY())) == 1 && mouseEvent.getButton() == MouseEvent.BUTTON1) {
-                        selectedPosition = 1;
-                        selectedMirror = mirror;
-                        break;
-                    } else if (mirror.onPoint(new Vector2f(mouseEvent.getX(), mouseEvent.getY())) == 2 && mouseEvent.getButton() == MouseEvent.BUTTON1) {
-                        selectedPosition = 2;
-                        selectedMirror = mirror;
-                        break;
+                    if (laser.onRadius(mouseEvent.getX(), mouseEvent.getY())) {
+                        onRadius = true;
+                    } else if (laser.onPoint(mouseEvent.getX(), mouseEvent.getY())) {
+                        onPoint = true;
                     }
                 }
             }
             public void mouseReleased(MouseEvent mouseEvent) {
                 if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
                     mouseDown = false;
-                }
-                for (Mirror mirror : mirrors) {
-                    if (mirror.onPoint(new Vector2f(mouseEvent.getX(), mouseEvent.getY())) == 1 && mouseEvent.getButton() == MouseEvent.BUTTON1) {
-                        selectedPosition = 0;
-                        selectedMirror = null;
-                        break;
-                    } else if (mirror.onPoint(new Vector2f(mouseEvent.getX(), mouseEvent.getY())) == 2 && mouseEvent.getButton() == MouseEvent.BUTTON1) {
-                        selectedPosition = 0;
-                        selectedMirror = null;
-                        break;
+                    if (onRadius) {
+                        onRadius = false;
+                    } else if (onPoint) {
+                        onPoint = false;
                     }
                 }
             }
@@ -96,15 +79,19 @@ public class Lasers {
             public void mouseDragged(MouseEvent mouseEvent) {
                 mouseX = mouseEvent.getX();
                 mouseY = mouseEvent.getY();
-                if (mouseDown && selectedMirror != null) {
-                    selectedMirror.movePoint(selectedPosition, new Vector2f(mouseX, mouseY));
+                if (onRadius) {
+                    laser.rotateLaser(mouseX, mouseY);
+                } else if (onPoint) {
+                    laser.translateLaser(mouseX, mouseY);
                 }
             }
             public void mouseMoved(MouseEvent mouseEvent) {
                 mouseX = mouseEvent.getX();
                 mouseY = mouseEvent.getY();
-                if (mouseDown && selectedMirror != null) {
-                    selectedMirror.movePoint(selectedPosition, new Vector2f(mouseX, mouseY));
+                if (onRadius) {
+                    laser.rotateLaser(mouseX, mouseY);
+                } else if (onPoint) {
+                    laser.translateLaser(mouseX, mouseY);
                 }
             }
         };
@@ -121,6 +108,7 @@ public class Lasers {
         };
         panel.addMouseListener(mouseListener);
         panel.addMouseMotionListener(mouseMotionListener);
+        panel.setBackground(Color.BLACK);
         frame.addKeyListener(keyListener);
         frame.add(panel);
         frame.pack();

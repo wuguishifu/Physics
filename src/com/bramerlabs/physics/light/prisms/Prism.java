@@ -1,8 +1,7 @@
-package com.bramerlabs.physics.prisms;
+package com.bramerlabs.physics.light.prisms;
 
 import com.bramerlabs.engine.math.vector.Vector2f;
 
-import javax.swing.*;
 import java.awt.*;
 
 public class Prism {
