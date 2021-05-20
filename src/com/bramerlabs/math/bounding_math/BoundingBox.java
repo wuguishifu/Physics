@@ -13,7 +13,7 @@ public class BoundingBox {
     protected final static int width = screenSize.width, height = screenSize.height;
     private boolean done = false, nextFrame = false;
     private int mouseX, mouseY;
-    private boolean mouseDown = false;
+    private boolean mouseDown;
 
     private static boolean fullscreen = true;
 
