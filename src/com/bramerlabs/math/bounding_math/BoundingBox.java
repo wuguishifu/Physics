@@ -118,6 +118,7 @@ public class BoundingBox {
         }
 
         frame.dispose();
+        System.out.println("Finished.");
 
     }
 
