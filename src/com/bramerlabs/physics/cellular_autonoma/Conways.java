@@ -18,7 +18,7 @@ public class Conways {
     int mouseX, mouseY;
 
     private boolean end = false;
-    private boolean run = false;
+    private boolean pause = false;
 
     public static void main(String[] args) {
         new Conways().init();
@@ -88,7 +88,7 @@ public class Conways {
             public void keyPressed(KeyEvent keyEvent) {
                 switch (keyEvent.getKeyCode()) {
                     case KeyEvent.VK_ESCAPE: end = true; break;
-                    case KeyEvent.VK_SPACE: run = !run; break;
+                    case KeyEvent.VK_SPACE: pause = !pause; break;
                     case KeyEvent.VK_R: clear(); break;
                     case KeyEvent.VK_S: print(); break;
                     case KeyEvent.VK_L: load(); break;
@@ -176,7 +176,7 @@ public class Conways {
 
     private void run() {
         while (!end) {
-            if (run) {
+            if (pause) {
                 updateGrid();
             }
             panel.repaint();
