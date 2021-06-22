@@ -35,7 +35,7 @@ public class Bezier {
 
     @SuppressWarnings("deprecation")
     private void init() {
-        curve = new Bezier3rd();
+        curve = new Bezier2();
 
         frame = new JFrame();
         frame.setSize(windowSize);

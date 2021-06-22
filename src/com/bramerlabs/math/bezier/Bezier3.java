@@ -2,7 +2,7 @@ package com.bramerlabs.math.bezier;
 
 import java.awt.*;
 
-public class Bezier3rd extends BezierCurve {
+public class Bezier3 extends BezierCurve {
 
     private int numSegments = 500;
     float separation = 1f/numSegments;
@@ -10,7 +10,7 @@ public class Bezier3rd extends BezierCurve {
     private Point[] points;
     Point selectedPoint = null;
 
-    public Bezier3rd() {
+    public Bezier3() {
         int width = Bezier.windowSize.width;
         int height = Bezier.windowSize.height;
         points = new Point[] {
@@ -22,11 +22,12 @@ public class Bezier3rd extends BezierCurve {
     }
 
     public Point bezierFunction(float t, Point[] p) {
-        float x = (1-t)*((1-t)*((1-t)*p[0].x+t*p[1].x)+t*((1-t)*p[1].x+t*p[2].x))+t*((1-t)*((1-t)*p[1].x+t*p[2].x)+t*((1-t)*p[2].x+t*p[3].x));
-        float y = (1-t)*((1-t)*((1-t)*p[0].y+t*p[1].y)+t*((1-t)*p[1].y+t*p[2].y))+t*((1-t)*((1-t)*p[1].y+t*p[2].y)+t*((1-t)*p[2].y+t*p[3].y));
+        float x = BezierFunction.bezierFunctionX(t, p);
+        float y = BezierFunction.bezierFunctionY(t, p);
         return new Point(x, y);
     }
 
+    @Override
     public void selectPoint(int x, int y) {
         for (Point p : points) {
             if (p.inBounds(x, y, Point.selectionRadius)) {
@@ -36,16 +37,19 @@ public class Bezier3rd extends BezierCurve {
         }
     }
 
+    @Override
     public void deselectPoint() {
         selectedPoint = null;
     }
 
+    @Override
     public void movePoint(int x, int y) {
         if (selectedPoint != null) {
             selectedPoint.moveTo(x, y);
         }
     }
 
+    @Override
     public void paint(Graphics g) {
         // draw the dashed lines
         Graphics2D g2d = (Graphics2D) g.create();
