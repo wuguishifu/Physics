@@ -78,7 +78,7 @@ public class BezierCurve {
     public void paint(Graphics g) {
         // draw dashed lines
         Graphics2D g2d = (Graphics2D) g.create();
-        Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{8}, 0);
+        Stroke dashed = new BasicStroke(2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL, 0, new float[]{8}, 0);
         g2d.setStroke(dashed);
         g2d.setColor(new Color(184, 184, 184));
         for (int i = 0; i < points.length - 1; i++) {
