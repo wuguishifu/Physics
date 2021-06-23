@@ -12,8 +12,8 @@ public class Bezier {
     private JPanel panel;
 
     protected static Dimension windowSize = new Dimension(800, 600);
-    private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private Vector2f windowPos = new Vector2f(screenSize.width/2f - windowSize.width/2f, screenSize.height/2f - windowSize.height/2f);
+    private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    private final Vector2f windowPos = new Vector2f(screenSize.width/2f - windowSize.width/2f, screenSize.height/2f - windowSize.height/2f);
 
     int mouseX, mouseY;
 
@@ -104,6 +104,7 @@ public class Bezier {
         this.run();
     }
 
+    @SuppressWarnings("BusyWait")
     private void run() {
         while (!end) {
 

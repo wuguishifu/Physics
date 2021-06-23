@@ -4,10 +4,10 @@ import java.awt.*;
 
 public class BezierCurve {
 
-    private int numSegments = 500;
+    private final int numSegments = 500;
     float separation = 1f/numSegments;
 
-    private Point[] points;
+    private final Point[] points;
     Point selectedPoint = null;
 
     public BezierCurve(int order) {
