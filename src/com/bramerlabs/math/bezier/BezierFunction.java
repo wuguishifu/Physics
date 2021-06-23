@@ -4,7 +4,13 @@ import java.util.Arrays;
 
 public class BezierFunction {
 
-    public static float bezierFunctionX(float t, Point[] p) {
+    public static Point bezierFunction(float t, Point[] p) {
+        float x = bezierFunctionX(t, p);
+        float y = bezierFunctionY(t, p);
+        return new Point(x, y);
+    }
+
+    private static float bezierFunctionX(float t, Point[] p) {
         if (p.length == 1) {
             return p[0].x;
         }
@@ -12,7 +18,7 @@ public class BezierFunction {
                 bezierFunctionX(t, Arrays.copyOf(p, p.length-1));
     }
 
-    public static float bezierFunctionY(float t, Point[] p) {
+    private static float bezierFunctionY(float t, Point[] p) {
         if (p.length == 1) {
             return p[0].y;
         }

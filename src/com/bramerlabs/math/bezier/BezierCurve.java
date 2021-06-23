@@ -51,9 +51,7 @@ public class BezierCurve {
     }
 
     private Point bezierFunction(float t, Point[] p) {
-        float x = BezierFunction.bezierFunctionX(t, p);
-        float y = BezierFunction.bezierFunctionY(t, p);
-        return new Point(x, y);
+        return BezierFunction.bezierFunction(t, p);
     }
 
     public void selectPoint(int x, int y) {
