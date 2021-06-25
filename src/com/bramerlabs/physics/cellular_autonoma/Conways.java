@@ -174,6 +174,7 @@ public class Conways {
         }
     }
 
+    @SuppressWarnings("BusyWait")
     private void run() {
         while (!end) {
             if (pause) {
