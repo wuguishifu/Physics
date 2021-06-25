@@ -16,6 +16,8 @@ public class Bullet {
 
     public ArrayList<Vector2f> prev = new ArrayList<>();
 
+    public boolean needsUpdate = true;
+
     public Bullet(float x, float y, Vector2f velocity) {
         this.position = new Vector2f(x, y);
         this.velocity = velocity;
@@ -27,6 +29,10 @@ public class Bullet {
         Vector2f gravity = new Vector2f(0, g);
         position = Vector2f.add(position, velocity);
         velocity = Vector2f.add(velocity, gravity);
+
+        if (position.y > ProjectileMotion.windowSize.height + 10 || position.x > ProjectileMotion.windowSize.width + 10) {
+            needsUpdate = false;
+        }
     }
 
     public void paint(Graphics g) {

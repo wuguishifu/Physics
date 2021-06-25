@@ -27,7 +27,7 @@ public class ProjectileMotion {
 
     private VelocitySlider vSlider;
 
-    private float gravity = 1f;
+    private static final float gravity = 1f;
 
     public static void main(String[] args) {
         new ProjectileMotion().init();
@@ -122,7 +122,7 @@ public class ProjectileMotion {
         this.run();
     }
 
-    private ArrayList<Bullet> bullets = new ArrayList<>();
+    private final ArrayList<Bullet> bullets = new ArrayList<>();
     public void launch() {
         bullets.add(new Bullet(cannon.getHead().x, cannon.getHead().y, Vector2f.normalize(Vector2f.subtract(cannon.getHead(), cannon.getTail()), vSlider.velocity * 35)));
     }
@@ -132,7 +132,9 @@ public class ProjectileMotion {
         while (!end) {
 
             for (Bullet b : bullets) {
-                b.update(gravity);
+                if (b.needsUpdate) {
+                    b.update(gravity);
+                }
             }
 
             panel.repaint();
