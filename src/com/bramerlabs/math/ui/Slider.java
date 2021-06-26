@@ -1,4 +1,4 @@
-package com.bramerlabs.math.slider;
+package com.bramerlabs.math.ui;
 
 import com.bramerlabs.engine.math.vector.Vector2f;
 
@@ -41,7 +41,7 @@ public class Slider {
         return amplitude * (2 * this.v - 1);
     }
 
-    public boolean inSliderBounds(int mouseX, int mouseY) {
+    public boolean inSliderBounds(float mouseX, float mouseY) {
         return mouseX >= m.x - radius && mouseX <= m.x + radius && mouseY >= m.y - radius && mouseY <= m.y + radius;
     }
 
