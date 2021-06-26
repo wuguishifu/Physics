@@ -2,22 +2,21 @@ package com.bramerlabs.math.ui;
 
 import java.awt.*;
 
-public class Switch {
+public class ToggleButton {
 
     private final float x, y;
     private final float width, height;
-    private final float xMid;
     private final Color color;
 
-    private boolean value; // off my default
-    public Switch(float x, float y, float width, float height, boolean value, Color color) {
+    private boolean value;
+
+    public ToggleButton(float x, float y, float width, float height, boolean value, Color color) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.value = value;
         this.color = color;
-        this.xMid = x + width / 2;
     }
 
     public boolean value() {
@@ -37,11 +36,10 @@ public class Switch {
     public void paint(Graphics g) {
         g.setColor(color);
         if (value) {
-            g.fillRect((int) x, (int) y, (int) width / 2, (int) height);
-            g.drawRect((int) x, (int) y, (int) width, (int) height);
-        } else {
-            g.drawRect((int) x, (int) y, (int) width, (int) height);
-            g.fillRect((int) xMid, (int) y, (int) width / 2, (int) height);
+            g.setColor(color);
+            g.fillRect((int) x, (int) y, (int) width, (int) height);
         }
+        g.drawRect((int) x, (int) y, (int) width, (int) height);
     }
+
 }

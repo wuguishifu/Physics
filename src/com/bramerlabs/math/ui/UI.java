@@ -24,15 +24,17 @@ public class UI {
     private Slider movingSlider = null;
 
     private final ArrayList<Switch> switches = new ArrayList<>();
+    private final ArrayList<ToggleButton> toggleButtons = new ArrayList<>();
 
     public static void main(String[] args) {
         new UI().init();
     }
 
     public void init() {
-        sliders.add(new Slider(new Vector2f(100, 100), new Vector2f(200, 200),
+        sliders.add(new Slider(new Vector2f(100, 200), new Vector2f(200, 200),
                 20, "label", new Color(62, 160, 75))); // amplitude
-        switches.add(new Switch(300, 300, 40, 15, false, new Color(62, 160, 75)));
+        switches.add(new Switch(300, 300, 40, 15, false, new Color(215, 73, 73)));
+        toggleButtons.add(new ToggleButton(300, 100, 15, 15, false, new Color(34, 78, 177)));
 
         frame = new JFrame();
         frame.setSize(windowSize);
@@ -51,6 +53,9 @@ public class UI {
                 for (Switch s : switches) {
                     s.paint(g);
                 }
+                for (ToggleButton t : toggleButtons) {
+                    t.paint(g);
+                }
             }
         };
         panel.setPreferredSize(windowSize);
@@ -68,6 +73,12 @@ public class UI {
                 for (Switch s : switches) {
                     if (s.inBounds(mouseX, mouseY) && mouseEvent.getButton() == MouseEvent.BUTTON1) {
                         s.toggle();
+                        break;
+                    }
+                }
+                for (ToggleButton t : toggleButtons) {
+                    if (t.inBounds(mouseX, mouseY) && mouseEvent.getButton() == MouseEvent.BUTTON1) {
+                        t.toggle();
                         break;
                     }
                 }
