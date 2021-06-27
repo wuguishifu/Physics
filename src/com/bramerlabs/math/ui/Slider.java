@@ -21,15 +21,17 @@ public class Slider {
     public static final int radius = 5;
 
     private final static float strength = 0.01f;
+    private final boolean normalized;
 
     DecimalFormat df = new DecimalFormat("0.000");
 
-    public Slider(Vector2f p1, Vector2f p2, float amplitude, String label, Color color) {
+    public Slider(Vector2f p1, Vector2f p2, float amplitude, String label, Color color, boolean normalized) {
         this.p1 = p1;
         this.p2 = p2;
         this.amplitude = amplitude;
         this.label = label;
         this.color = color;
+        this.normalized = normalized;
         normal = Vector2f.subtract(p2, p1);
         float midpoint = Vector2f.length(normal) / 2;
         m = Vector2f.add(p1, Vector2f.normalize(normal, midpoint));
@@ -38,7 +40,7 @@ public class Slider {
     }
 
     public float value() {
-        return amplitude * (2 * this.v - 1);
+        return normalized ? this.v : amplitude * (2 * this.v - 1);
     }
 
     public boolean inSliderBounds(float mouseX, float mouseY) {
@@ -65,8 +67,13 @@ public class Slider {
         g2d.setStroke(new BasicStroke(1));
         g2d.drawLine((int) p1.x, (int) p1.y, (int) p2.x, (int) p2.y);
         g2d.fillOval((int) m.x - radius, (int) m.y - radius, 2 * radius, 2 * radius);
-        drawCenteredText(g, (int) p2.x, (int) p2.y, (int) p2.x + 20, (int) p2.y - 20, df.format(2 * this.v - 1));
+        drawCenteredText(g, (int) p2.x, (int) p2.y, (int) p2.x + 20, (int) p2.y - 20, df.format(normalized ? this.v : 2 * this.v - 1));
         drawCenteredText(g, (int) p1.x - 20, (int) p1.y - 20, (int) p1.x, (int) p1.y, label);
+    }
+
+    public void drawLabel(Graphics g, int minX, int minY, int maxX, int maxY) {
+        Graphics2D g2d = (Graphics2D) g;
+        g.drawString((new DecimalFormat("0.000")).format(normalized ? this.v : 2 * this.v - 1), (maxX - minX - (int) g2d.getFontMetrics().getStringBounds((new DecimalFormat("0.000")).format(normalized ? this.v : 2 * this.v - 1), g2d).getWidth() / 2 + minX), (maxY - minY - (int) g2d.getFontMetrics().getStringBounds((new DecimalFormat("0.000")).format(normalized ? this.v : 2 * this.v - 1), g2d).getWidth() / 2 + minY + g2d.getFontMetrics().getAscent()));
     }
 
     /**

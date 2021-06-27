@@ -32,7 +32,7 @@ public class UI {
 
     public void init() {
         sliders.add(new Slider(new Vector2f(100, 200), new Vector2f(200, 200),
-                20, "label", new Color(62, 160, 75))); // amplitude
+                20, "label", new Color(62, 160, 75), false)); // amplitude
         switches.add(new Switch(300, 300, 40, 15, false, new Color(215, 73, 73)));
         toggleButtons.add(new ToggleButton(300, 100, 15, 15, false, new Color(34, 78, 177)));
 

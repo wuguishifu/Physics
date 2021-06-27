@@ -24,26 +24,28 @@ public class Sine {
     private final ArrayList<Slider> sliders = new ArrayList<>();
     private Slider movingSlider = null;
 
-    private boolean state = false;
+    private boolean state = true;
 
     public static void main(String[] args) {
         new Sine().init();
     }
 
-    public void paintSine(Graphics g, float amplitude, float period) {
+    public void paintSine(Graphics g, float amplitude, float period, float offset) {
         g.setColor(Color.BLACK);
         float[] y = new float[windowSize.width];
         for (int x = 0; x < windowSize.width; x++) {
             if (state) {
-                y[x] = windowSize.height / 2f + (float) Math.sin(x / 100.f - period) * amplitude;
+                y[x] = windowSize.height * offset + (float) Math.sin(x / 100.f - period) * amplitude;
             } else {
-                y[x] = windowSize.height / 2f + (float) Math.cos(x / 100.f - period) + amplitude;
+                y[x] = windowSize.height * offset + (float) Math.tan(x / 100.f - period) * amplitude;
             }
         }
         Graphics2D g2d = (Graphics2D) g.create();
         g2d.setStroke(new BasicStroke(2));
-        for (int i = 0; i < y.length; i++) {
-            g2d.drawLine(i, (int) y[i], i, (int) y[i]);
+        for (int i = 0; i < y.length - 1; i++) {
+            if ((!(y[i] < 0) || !(y[i + 1] > windowSize.height)) && (!(y[i] > windowSize.height) || !(y[i + 1] < 0))) {
+                g2d.drawLine(i, (int) y[i], i + 1, (int) y[i + 1]);
+            }
         }
         g2d.dispose();
     }
@@ -51,9 +53,11 @@ public class Sine {
     public void init() {
         int size = 200;
         sliders.add(new Slider(new Vector2f(size, windowSize.height - 100), new Vector2f(windowSize.width - size,
-                windowSize.height - 100), 100, "Amplitude", new Color(141, 23, 23))); // amplitude
+                windowSize.height - 100), 100, "Amplitude", new Color(141, 23, 23), false)); // amplitude
+        sliders.add(new Slider(new Vector2f(size, windowSize.height - 75), new Vector2f(windowSize.width - size,
+                windowSize.height - 75), 3, "Period", new Color(23, 70, 141), false)); // period
         sliders.add(new Slider(new Vector2f(size, windowSize.height - 50), new Vector2f(windowSize.width - size,
-                windowSize.height - 50), 3, "Period", new Color(23, 70, 141))); // amplitude
+                windowSize.height - 50), 3, "Offset", new Color(23, 141, 25), true)); // period
 
         frame = new JFrame();
         frame.setSize(windowSize);
@@ -69,7 +73,7 @@ public class Sine {
                 for (Slider s : sliders) {
                     s.paint(g);
                 }
-                paintSine(g, sliders.get(0).value(), sliders.get(1).value());
+                paintSine(g, sliders.get(0).value(), sliders.get(1).value(), sliders.get(2).value());
             }
         };
         panel.setPreferredSize(windowSize);
