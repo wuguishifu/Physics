@@ -6,15 +6,16 @@ import java.awt.*;
 
 public class Node {
 
-    private final Vector2f pos;
-    private final int radius = 5;
-    private final Color color = new Color(79, 100, 137);
+    private Vector2f pos;
+    private int radius = 5;
+    private Color color = new Color(79, 100, 137);
 
     public Node(Vector2f pos) {
         this.pos = pos;
+//        this.color = new Color((int) (256 * Math.random()), (int) (256 * Math.random()), (int) (256 * Math.random()));
     }
 
-    public void paint(Graphics g) {
+    public void paint(Graphics g, int radius) {
         g.setColor(color);
         g.fillOval((int) (pos.x - radius), (int) (pos.y - radius), 2 * radius, 2 * radius);
     }

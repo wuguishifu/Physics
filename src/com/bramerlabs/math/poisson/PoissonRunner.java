@@ -35,16 +35,16 @@ public class PoissonRunner {
     public int numSamplesBeforeRejection = 30;
 
     public void calc() {
-        ArrayList<Vector2f> points = Poisson.generatePoints(15, regionSize, numSamplesBeforeRejection);
+        nodes.clear();
+        ArrayList<Vector2f> points = Poisson.generatePoints(sliders.get(0).value() * 100 + 10, regionSize, numSamplesBeforeRejection);
         for (Vector2f p : points) {
             nodes.add(new Node(p));
-            System.out.println(p);
         }
     }
 
     public void drawNodes(Graphics g) {
         for (Node node : nodes) {
-            node.paint(g);
+            node.paint(g, (int) (sliders.get(0).value() * 50 + 1));
         }
     }
 
@@ -52,6 +52,9 @@ public class PoissonRunner {
         frame = new JFrame();
         frame.setSize(windowSize);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        float sliderHeight = windowSize.height - 50;
+        float sliderRight = windowSize.width - 100;
+        sliders.add(new Slider(new Vector2f(100, sliderHeight), new Vector2f(sliderRight, sliderHeight), 10, "Radius", new Color(177, 55, 55), true));
 
         calc();
 
@@ -63,6 +66,9 @@ public class PoissonRunner {
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 super.paint(g);
                 drawNodes(g);
+                for (Slider slider : sliders) {
+                    slider.paint(g);
+                }
             }
         };
         panel.setPreferredSize(windowSize);
@@ -94,6 +100,7 @@ public class PoissonRunner {
                 mouseY = mouseEvent.getY();
                 if (movingSlider != null) {
                     movingSlider.moveSliderTo(mouseX, mouseY);
+                    calc();
                 }
             }
             public void mouseMoved(MouseEvent mouseEvent) {
