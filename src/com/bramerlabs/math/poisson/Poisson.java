@@ -18,7 +18,7 @@ public class Poisson {
         int[][] sampleArray = new int[sampleX][sampleY];
         for (int i = 0; i < sampleX; i++) {
             for (int j = 0; j < sampleY; j++) {
-                sampleArray[i][j] = -1;
+                sampleArray[i][j] = 0;
             }
         }
 

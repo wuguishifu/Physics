@@ -31,11 +31,11 @@ public class PoissonRunner {
     public ArrayList<Node> nodes = new ArrayList<>();
 
     public float radius = 10;
-    public Vector2f regionSize = Vector2f.scale(Vector2f.one, 200);
+    public Vector2f regionSize = new Vector2f(windowSize.width, windowSize.height);
     public int numSamplesBeforeRejection = 30;
 
     public void calc() {
-        ArrayList<Vector2f> points = Poisson.generatePoints(radius, regionSize, numSamplesBeforeRejection);
+        ArrayList<Vector2f> points = Poisson.generatePoints(15, regionSize, numSamplesBeforeRejection);
         for (Vector2f p : points) {
             nodes.add(new Node(p));
             System.out.println(p);
@@ -44,8 +44,7 @@ public class PoissonRunner {
 
     public void drawNodes(Graphics g) {
         for (Node node : nodes) {
-            node.paint(g, windowSize);
-            System.out.println(node.getPos());
+            node.paint(g);
         }
     }
 
