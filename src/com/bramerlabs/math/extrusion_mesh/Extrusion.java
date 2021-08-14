@@ -1,7 +1,6 @@
-package com.bramerlabs.math.poisson;
+package com.bramerlabs.math.extrusion_mesh;
 
 import com.bramerlabs.engine.math.vector.Vector2f;
-import com.bramerlabs.math.ui.Slider;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,7 +8,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 
 @SuppressWarnings("deprecation")
-public class PoissonRunner {
+public class Extrusion {
 
     private JFrame frame;
     private JPanel panel;
@@ -21,74 +20,89 @@ public class PoissonRunner {
     private int mouseX, mouseY;
     private boolean end = false;
 
-    private final ArrayList<Slider> sliders = new ArrayList<>();
-    private Slider movingSlider = null;
+    private ArrayList<Point> activePoints = new ArrayList<>();
+    private final ArrayList<ArrayList<Point>> curves = new ArrayList<>();
+
+    private final static int numSubdivisions = 4;
 
     public static void main(String[] args) {
-        new PoissonRunner().init();
+        new Extrusion().init();
     }
 
-    public ArrayList<Node> nodes = new ArrayList<>();
-
-    public float radius = 10;
-    public Vector2f regionSize = new Vector2f(windowSize.width, windowSize.height);
-    public int numSamplesBeforeRejection = 30;
-
-    public void calc() {
-        nodes.clear();
-        ArrayList<Vector2f> points = Poisson.generatePoints(sliders.get(0).value() * 100 + 10, regionSize, numSamplesBeforeRejection);
-        for (Vector2f p : points) {
-            nodes.add(new Node(p));
+    public void drawCurve(Graphics g, ArrayList<Point> curve) {
+        // draw top curve
+        for (int i = 0; i < curve.size() - 1; i++) {
+            g.drawLine(curve.get(i).x, curve.get(i).y, curve.get(i + 1).x, curve.get(i + 1).y);
         }
+
+        // draw reflection
+        int h = windowSize.height;
+        for (int i = 0; i < curve.size() - 1; i++) {
+            g.drawLine(curve.get(i).x, h - curve.get(i).y, curve.get(i + 1).x, h - curve.get(i + 1).y);
+        }
+
+        // draw connecting lines
+        for (int i = 0; i < curve.size() - 1; i++) {
+            g.drawLine(curve.get(i).x, curve.get(i).y, curve.get(i).x, h - curve.get(i).y);
+        }
+
+        ArrayList<Point> curve2 = new ArrayList<>();
+        for (Point point : curve) {
+            curve2.add(new Point(point.x, h - point.y));
+        }
+        subdivide(g, curve, curve2, numSubdivisions);
     }
 
-    public void drawNodes(Graphics g) {
-        for (Node node : nodes) {
-            node.paint(g, (int) (sliders.get(0).value() * 50 + 1));
+    public void subdivide(Graphics g, ArrayList<Point> c1, ArrayList<Point> c2, int depth) {
+        if (depth <= 0) {
+            return;
         }
+        ArrayList<Point> sub = new ArrayList<>();
+        for (int i = 0; i < c1.size(); i++) {
+            sub.add(new Point(c1.get(i).x, (c1.get(i).y + c2.get(i).y) / 2));
+        }
+        for (int i = 0; i < sub.size() - 1; i++) {
+            g.drawLine(sub.get(i).x, sub.get(i).y, sub.get(i + 1).x, sub.get(i + 1).y);
+        }
+        subdivide(g, c1, sub, depth - 1);
+        subdivide(g, c2, sub, depth - 1);
     }
 
     public void init() {
         frame = new JFrame();
         frame.setSize(windowSize);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        float sliderHeight = windowSize.height - 50;
-        float sliderRight = windowSize.width - 100;
-        sliders.add(new Slider(new Vector2f(100, sliderHeight), new Vector2f(sliderRight, sliderHeight), 10, "Radius", new Color(177, 55, 55), true));
 
-        calc();
 
         panel = new JPanel(true) {
             @Override
             public void paint(Graphics g) {
                 Graphics2D g2d = (Graphics2D) g;
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2d.setStroke(new BasicStroke(1));
                 super.paint(g);
-                drawNodes(g);
-                for (Slider slider : sliders) {
-                    slider.paint(g);
+                g.setColor(new Color(219, 207, 117));
+                drawCurve(g, activePoints);
+                for (ArrayList<Point> curve : curves) {
+                    drawCurve(g, curve);
                 }
             }
         };
         panel.setPreferredSize(windowSize);
+        panel.setBackground(new Color(22, 22, 22));
         MouseListener mouseListener = new MouseListener() {
             public void mouseClicked(MouseEvent mouseEvent) {}
             public void mousePressed(MouseEvent mouseEvent) {
                 mouseX = mouseEvent.getX();
                 mouseY = mouseEvent.getY();
-                for (Slider s : sliders) {
-                    if (s.inSliderBounds(mouseX, mouseY) && mouseEvent.getButton() == MouseEvent.BUTTON1) {
-                        movingSlider = s;
-                        break;
-                    }
-                }
+                activePoints = new ArrayList<>();
+                activePoints.add(new Point(mouseX, mouseY));
             }
             public void mouseReleased(MouseEvent mouseEvent) {
                 mouseX = mouseEvent.getX();
                 mouseY = mouseEvent.getY();
-                if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
-                    movingSlider = null;
-                }
+                activePoints.add(new Point(mouseX, mouseY));
+                curves.add(activePoints);
             }
             public void mouseEntered(MouseEvent mouseEvent) {}
             public void mouseExited(MouseEvent mouseEvent) {}
@@ -97,10 +111,10 @@ public class PoissonRunner {
             public void mouseDragged(MouseEvent mouseEvent) {
                 mouseX = mouseEvent.getX();
                 mouseY = mouseEvent.getY();
-                if (movingSlider != null) {
-                    movingSlider.moveSliderTo(mouseX, mouseY);
-                    calc();
-                }
+//                if (mouseX % 20 == 0) {
+                    activePoints.add(new Point(mouseX, mouseY));
+//                }
+//                activePoints.add(new Point((int) (20 * Math.floor(mouseX / 20f)), mouseY));
             }
             public void mouseMoved(MouseEvent mouseEvent) {
                 mouseX = mouseEvent.getX();
@@ -139,7 +153,7 @@ public class PoissonRunner {
             panel.repaint();
 
             try {
-                Thread.sleep(20);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
                 break;
