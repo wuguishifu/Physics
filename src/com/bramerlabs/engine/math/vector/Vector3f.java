@@ -619,6 +619,10 @@ public class Vector3f {
         return new float[]{x, y, z};
     }
 
+    public static Color toColor(Vector3f v) {
+        return new Color(v.x/255.f, v.y/255.f, v.z/255.f);
+    }
+
     /**
      * determines if two vectors are exactly identical
      * @param o - the other object
