@@ -1,4 +1,4 @@
-package com.bramerlabs.physics.gravity;
+package com.bramerlabs.physics.gravity_3d;
 
 import com.bramerlabs.engine.math.vector.Vector3f;
 import com.bramerlabs.engine.math.vector.Vector4f;

@@ -1,4 +1,4 @@
-package com.bramerlabs.physics.gravity;
+package com.bramerlabs.physics.gravity_3d;
 
 import com.bramerlabs.engine.graphics.Camera;
 import com.bramerlabs.engine.graphics.Shader;
