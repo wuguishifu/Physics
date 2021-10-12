@@ -1,30 +1,28 @@
 package com.bramerlabs.physics.gravity_2d;
 
-import com.bramerlabs.engine.math.vector.Vector2f;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 public class Gravity {
 
     private JFrame frame;
     private JPanel panel;
 
-    protected static Dimension windowSize = new Dimension(800, 600);
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private final Vector2f windowPos = new Vector2f(screenSize.width/2f - windowSize.width/2f, screenSize.height/2f - windowSize.height/2f);
+    private final Dimension windowSize = new Dimension(screenSize.width / 2, screenSize.height / 2);
 
     int mouseX, mouseY;
 
     private boolean end = false;
 
+    ArrayList<Particle> particles = new ArrayList<>();
 
     public static void main(String[] args) {
         new Gravity().init();
     }
 
-    @SuppressWarnings("deprecation")
     private void init() {
         frame = new JFrame();
         frame.setSize(windowSize);
@@ -37,6 +35,9 @@ public class Gravity {
                 Graphics2D g2d = (Graphics2D) g;
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 super.paint(g);
+                for (Particle particle : particles) {
+                    particle.paint(g);
+                }
             }
         };
         panel.setPreferredSize(windowSize);
@@ -46,7 +47,7 @@ public class Gravity {
                 mouseX = mouseEvent.getX();
                 mouseY = mouseEvent.getY();
                 if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
-
+                    particles.add(new Particle(mouseX, mouseY));
                 }
             }
             public void mouseReleased(MouseEvent mouseEvent) {
@@ -80,7 +81,7 @@ public class Gravity {
         frame.addKeyListener(keyListener);
         frame.add(panel);
         frame.pack();
-        frame.move((int) windowPos.x, (int) windowPos.y);
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         panel.repaint();
 
@@ -90,9 +91,10 @@ public class Gravity {
     @SuppressWarnings("BusyWait")
     private void run() {
         while (!end) {
-
             panel.repaint();
-
+            for (Particle particle : particles) {
+                particle.update(particles);
+            }
             try {
                 Thread.sleep(20);
             } catch (InterruptedException e) {
