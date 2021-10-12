@@ -10,6 +10,7 @@ public class Particle {
     public Vector2f position;
     public Vector2f velocity = new Vector2f(0, 0);
     public Vector2f force = new Vector2f(0, 0);
+    public Vector2f friction = new Vector2f(0, 0);
 
     public int radius = 10;
 
@@ -28,6 +29,12 @@ public class Particle {
             float magnitude = (float) Math.pow(Vector2f.distance(particle.position, this.position), 2);
             Vector2f normal = Vector2f.normalize(Vector2f.subtract(particle.position, this.position), 1000 * (1/magnitude));
             this.force = Vector2f.add(force, normal);
+        }
+
+        if (Vector2f.length(force) > 0) {
+            float frictionMagnitude = Math.min(0.1f * Vector2f.length(force), 100.0f);
+            Vector2f friction = Vector2f.normalize(Vector2f.subtract(new Vector2f(0, 0), force), frictionMagnitude);
+            force = Vector2f.add(force, friction);
         }
 
         this.position = Vector2f.add(position, velocity);
