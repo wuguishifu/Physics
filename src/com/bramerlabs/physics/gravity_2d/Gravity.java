@@ -92,8 +92,16 @@ public class Gravity {
     private void run() {
         while (!end) {
             panel.repaint();
+            ArrayList<Particle> particlesToRemove = new ArrayList<>();
             for (Particle particle : particles) {
                 particle.update(particles);
+                if (particle.position.x < -20 || particle.position.x > windowSize.width + 20 ||
+                        particle.position.y < -20 || particle.position.y > windowSize.height + 20) {
+                    particlesToRemove.add(particle);
+                }
+            }
+            for (Particle particle : particlesToRemove) {
+                particles.remove(particle);
             }
             try {
                 Thread.sleep(20);

@@ -42,8 +42,8 @@ public class Particle {
                 continue;
             }
             if (Vector2f.distance(particle.position, newPosition) < 2 * radius) {
-                Vector2f normal = Vector2f.normalize(Vector2f.subtract(newPosition, particle.position));
-                newPosition = Vector2f.add(newPosition, normal);
+                Vector2f normalForce = Vector2f.subtract(particle.position, this.position);
+                this.velocity = Vector2f.add(Vector2f.scale(Vector2f.add(force, normalForce), 0.7f), this.velocity);
             }
         }
 
