@@ -408,6 +408,18 @@ public class Vector2f {
     }
 
     /**
+     * computes the square distance between two vectors
+     * @param v - the first vector
+     * @param u - the second vector
+     * @return - the square distance
+     */
+    public static float squareDistance(Vector2f v, Vector2f u) {
+        float dx = u.x - v.x;
+        float dy = u.y - v.y;
+        return dx * dx + dy + dy;
+    }
+
+    /**
      * getter method
      * @return - the x component of this vector
      */

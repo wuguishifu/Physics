@@ -11,11 +11,12 @@ public class Gravity {
     private JPanel panel;
 
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private final Dimension windowSize = new Dimension(screenSize.width / 2, screenSize.height / 2);
+    private final Dimension windowSize = new Dimension(7 * screenSize.width / 8, 7 * screenSize.height / 8);
 
     int mouseX, mouseY;
 
     private boolean end = false;
+    private boolean nextFrame = false;
 
     ArrayList<Particle> particles = new ArrayList<>();
 
@@ -47,7 +48,7 @@ public class Gravity {
                 mouseX = mouseEvent.getX();
                 mouseY = mouseEvent.getY();
                 if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
-                    particles.add(new Particle(mouseX, mouseY));
+                    particles.add(new Particle(mouseX, mouseY, 1.0f));
                 }
             }
             public void mouseReleased(MouseEvent mouseEvent) {
@@ -72,9 +73,15 @@ public class Gravity {
             public void keyPressed(KeyEvent keyEvent) {
                 if (keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE) {
                     end = true;
+                } else if (keyEvent.getKeyCode() == KeyEvent.VK_SPACE) {
+                    curr = true;
                 }
             }
-            public void keyReleased(KeyEvent keyEvent) {}
+            public void keyReleased(KeyEvent keyEvent) {
+                if (keyEvent.getKeyCode() == KeyEvent.VK_SPACE) {
+                    curr = false;
+                }
+            }
         };
         panel.addMouseListener(mouseListener);
         panel.addMouseMotionListener(mouseMotionListener);
@@ -83,26 +90,35 @@ public class Gravity {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        panel.repaint();
 
+        particles.add(new Particle(windowSize.width/2+20, windowSize.height/2, 0, -2, 1));
+        particles.add(new Particle(windowSize.width/2-20, windowSize.height/2, 0,  2, 1));
+
+        panel.repaint();
         this.run();
     }
 
+    boolean curr = false;
+    boolean run = true;
     @SuppressWarnings("BusyWait")
     private void run() {
         while (!end) {
             panel.repaint();
-            ArrayList<Particle> particlesToRemove = new ArrayList<>();
-            for (Particle particle : particles) {
-                particle.update(particles);
-                if (particle.position.x < -20 || particle.position.x > windowSize.width + 20 ||
-                        particle.position.y < -20 || particle.position.y > windowSize.height + 20) {
-                    particlesToRemove.add(particle);
+            if (curr || run) {
+                ArrayList<Particle> particlesToRemove = new ArrayList<>();
+                for (Particle particle : particles) {
+                    particle.update(particles);
+                    particle.move();
+                    if (particle.position.x < -20 || particle.position.x > windowSize.width + 20 ||
+                            particle.position.y < -20 || particle.position.y > windowSize.height + 20) {
+                        particlesToRemove.add(particle);
+                    }
+                }
+                for (Particle particle : particlesToRemove) {
+                    particles.remove(particle);
                 }
             }
-            for (Particle particle : particlesToRemove) {
-                particles.remove(particle);
-            }
+            curr = false;
             try {
                 Thread.sleep(20);
             } catch (InterruptedException e) {

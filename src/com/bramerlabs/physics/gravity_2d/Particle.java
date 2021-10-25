@@ -8,50 +8,62 @@ import java.util.ArrayList;
 public class Particle {
 
     public Vector2f position;
-    public Vector2f velocity = new Vector2f(0, 0);
-    public Vector2f force = new Vector2f(0, 0);
+    public Vector2f velocity;
+    public Vector2f acceleration;
+    public Vector2f force;
 
-    public int radius = 20;
+    public int radius = 10;
+    public float mass;
 
     public Color color = new Color(45, 147, 35);
 
-    public Particle(int x, int y) {
+    public Particle(int x, int y, float mass) {
         this.position = new Vector2f(x, y);
+        this.velocity = new Vector2f(0, 0);
+        this.acceleration = new Vector2f(0, 0);
+        this.force = new Vector2f(0, 0);
+        this.mass = mass;
+    }
+
+    public Particle(int x, int y, int dx, int dy, float mass) {
+        this.position = new Vector2f(x, y);
+        this.velocity = new Vector2f(dx, dy);
+        this.acceleration = new Vector2f(0, 0);
+        this.force = new Vector2f(0, 0);
+        this.mass = mass;
     }
 
     public void update(ArrayList<Particle> particles) {
         this.force = new Vector2f(0, 0);
+        this.acceleration = new Vector2f(0, 0);
         for (Particle particle : particles) {
-            if (this == particle) {
+            if (particle == this) {
                 continue;
             }
-            float magnitude = (float) Math.pow(Vector2f.distance(particle.position, this.position), 2);
-            Vector2f normal = Vector2f.normalize(Vector2f.subtract(particle.position, this.position), 100 * (1/magnitude));
-            this.force = Vector2f.add(force, normal);
+            this.force = Vector2f.add(force, forceBetween(this, particle));
         }
+        this.acceleration = Vector2f.scale(force, 1f/mass);
+        this.velocity = Vector2f.add(velocity, acceleration);
+    }
 
-        if (Vector2f.length(force) > 0) {
-            float frictionMagnitude = Math.min(0.1f * Vector2f.length(force), 100.0f);
-            Vector2f friction = Vector2f.normalize(Vector2f.subtract(new Vector2f(0, 0), force), frictionMagnitude);
-            force = Vector2f.add(force, friction);
-        }
-
-        Vector2f newPosition = Vector2f.add(position, velocity);
-        for (Particle particle : particles) {
-            if (this == particle) {
-                continue;
-            }
-            if (Vector2f.distance(newPosition, particle.position) < 2 * radius) {
-                force = Vector2f.add(force, Vector2f.scale(Vector2f.subtract(particle.position, newPosition), 0.01f));
-            }
-        }
-        this.position = newPosition;
-        this.velocity = Vector2f.add(velocity, force);
+    public void move() {
+        this.position = Vector2f.add(position, velocity);
     }
 
     public void paint(Graphics g) {
         g.setColor(color);
         g.fillOval((int) position.x - radius, (int) position.y - radius, 2 * radius, 2 * radius);
+        g.setColor(Color.RED);
+        g.drawLine((int) position.x, (int) position.y, (int) (position.x + velocity.x * 10), (int) (position.y + velocity.y * 10));
+        g.setColor(Color.BLUE);
+        g.drawLine((int) position.x, (int) position.y, (int) (position.x + force.x * 100), (int) (position.y + force.y * 100));
+    }
+
+    final static float G = 10f;
+    public static Vector2f forceBetween(Particle p1, Particle p2) {
+        float squareDistance = Vector2f.squareDistance(p1.position, p2.position);
+        float magnitude = (G * p1.mass * p2.mass)/squareDistance;
+        return Vector2f.normalize(Vector2f.subtract(p2.position, p1.position), magnitude);
     }
 
 }
