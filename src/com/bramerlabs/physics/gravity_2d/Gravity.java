@@ -91,8 +91,8 @@ public class Gravity {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-        particles.add(new Particle(windowSize.width/2+20, windowSize.height/2, 0, -2, 1));
-        particles.add(new Particle(windowSize.width/2-20, windowSize.height/2, 0,  2, 1));
+        particles.add(new Particle(windowSize.width/2+20, windowSize.height/2, 0, -3, 1));
+        particles.add(new Particle(windowSize.width/2-20, windowSize.height/2, 0,  3, 1));
 
         panel.repaint();
         this.run();

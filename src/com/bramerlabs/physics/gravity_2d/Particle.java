@@ -33,14 +33,20 @@ public class Particle {
         this.mass = mass;
     }
 
+    final static float G = 100;
     public void update(ArrayList<Particle> particles) {
         this.force = new Vector2f(0, 0);
         this.acceleration = new Vector2f(0, 0);
         for (Particle particle : particles) {
-            if (particle == this) {
-                continue;
+            if (particle != this) {
+                Vector2f normal = Vector2f.subtract(this.position, particle.position);
+                Vector2f v = this.position;
+                Vector2f u = particle.position;
+                float dx = 0.5f * (v.x - u.x);
+                float dy = 0.5f * (v.y - u.y);
+                float magnitude = -G * particle.mass * this.mass / (dx * dx + dy * dy);
+                this.force = Vector2f.add(force, Vector2f.normalize(normal, magnitude));
             }
-            this.force = Vector2f.add(force, forceBetween(this, particle));
         }
         this.acceleration = Vector2f.scale(force, 1f/mass);
         this.velocity = Vector2f.add(velocity, acceleration);
@@ -57,13 +63,6 @@ public class Particle {
         g.drawLine((int) position.x, (int) position.y, (int) (position.x + velocity.x * 10), (int) (position.y + velocity.y * 10));
         g.setColor(Color.BLUE);
         g.drawLine((int) position.x, (int) position.y, (int) (position.x + force.x * 100), (int) (position.y + force.y * 100));
-    }
-
-    final static float G = 10f;
-    public static Vector2f forceBetween(Particle p1, Particle p2) {
-        float squareDistance = Vector2f.squareDistance(p1.position, p2.position);
-        float magnitude = (G * p1.mass * p2.mass)/squareDistance;
-        return Vector2f.normalize(Vector2f.subtract(p2.position, p1.position), magnitude);
     }
 
 }
