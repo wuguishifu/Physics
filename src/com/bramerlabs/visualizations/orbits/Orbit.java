@@ -21,7 +21,8 @@ public class Orbit {
 
     public Vector2f p1, p2;
     public int r1 = 5, r2 = 5, r3 = 5;
-    float aV1 = -0.05f, av2 = -0.1f;
+    float t1 = 1.00f, t2 = 1.88f;
+    float aV1 = -2 * (float) Math.PI / (100 * t1), av2 = -2 * (float) Math.PI / (100 * t2);
 
     int current = 0;
 
@@ -42,8 +43,9 @@ public class Orbit {
         current++;
         p1 = rotate(p1, aV1);
         p2 = rotate(p2, av2);
-        if (current > 10) {
+        if (current > 1) {
             lines.add(new Line(p1, p2));
+            current = 0;
         }
     }
 
@@ -58,8 +60,8 @@ public class Orbit {
     }
 
     private void init() {
-        p1 = new Vector2f(100, 0);
-        p2 = new Vector2f(200, 0);
+        p1 = new Vector2f(200, 0);
+        p2 = new Vector2f(400, 0);
 
         frame = new JFrame();
         frame.setSize(windowSize);
@@ -73,13 +75,16 @@ public class Orbit {
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 super.paint(g);
 
-                g2d.fillOval(windowSize.width / 2 - r3, windowSize.height / 2 - r3, 2 * r3, 2 * r3);
-                g2d.fillOval((int) p1.x - r1 + windowSize.width / 2, (int) p1.y - r1 + windowSize.height / 2, 2 * r1, 2 * r1);
-                g2d.fillOval((int) p2.x - r2 + windowSize.width / 2, (int) p2.y - r2 + windowSize.height / 2, 2 * r2, 2 * r2);
-
+                g.setColor(new Color(69, 177, 187));
+//                g.setColor(new Color(183, 233, 238));
                 for (Line l : lines) {
                     l.paint(g, windowSize);
                 }
+
+//                g.setColor(new Color(69, 177, 187));
+                g2d.fillOval(windowSize.width / 2 - r3, windowSize.height / 2 - r3, 2 * r3, 2 * r3);
+                g2d.fillOval((int) p1.x - r1 + windowSize.width / 2, (int) p1.y - r1 + windowSize.height / 2, 2 * r1, 2 * r1);
+                g2d.fillOval((int) p2.x - r2 + windowSize.width / 2, (int) p2.y - r2 + windowSize.height / 2, 2 * r2, 2 * r2);
             }
         };
         panel.setPreferredSize(windowSize);
