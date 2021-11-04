@@ -1,13 +1,12 @@
-package com.bramerlabs.visualizations.orbits;
+package com.bramerlabs.visualizations.ellipses;
 
 import com.bramerlabs.engine.math.vector.Vector2f;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 
-public class Orbit {
+public class Ellipses {
 
     private JFrame frame;
     private JPanel panel;
@@ -19,34 +18,7 @@ public class Orbit {
 
     private boolean end = false;
 
-    public Vector2f p1, p2;
-    public int r1 = 5, r2 = 5, r3 = 5;
-    float t1 = 1.00f, t2 = 1.88f;
-    float aV1 = -2 * (float) Math.PI / (100 * t1), av2 = -2 * (float) Math.PI / (100 * t2);
-
-    int current = 0;
-
-    private ArrayList<Line> lines = new ArrayList<>();
-
-    private static class Line {
-        public Vector2f v1, v2;
-        public Line(Vector2f v1, Vector2f v2) {
-            this.v1 = v1;
-            this.v2 = v2;
-        }
-        public void paint(Graphics g, Dimension w) {
-            g.drawLine((int) (v1.x + 0.5 * w.width), (int) (v1.y + 0.5 * w.height), (int) (v2.x + 0.5 * w.width), (int) (v2.y + 0.5 * w.height));
-        }
-    }
-
     public void update() {
-        current++;
-        p1 = rotate(p1, aV1);
-        p2 = rotate(p2, av2);
-//        if (current > 1) {
-            lines.add(new Line(p1, p2));
-            current = 0;
-//        }
     }
 
     public static Vector2f rotate(Vector2f v, float a) {
@@ -56,35 +28,26 @@ public class Orbit {
     }
 
     public static void main(String[] args) {
-        new Orbit().init();
+        new Ellipses().init();
     }
 
     private void init() {
-        p1 = new Vector2f(200, 0);
-        p2 = new Vector2f(400, 0);
-
         frame = new JFrame();
         frame.setSize(windowSize);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         panel = new JPanel(true) {
-
             @Override
             public void paint(Graphics g) {
                 Graphics2D g2d = (Graphics2D) g;
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 super.paint(g);
 
-                g.setColor(new Color(69, 177, 187));
-//                g.setColor(new Color(183, 233, 238));
-                for (Line l : lines) {
-                    l.paint(g, windowSize);
+                for (int i = 0; i < 400; i += 20) {
+                    g.drawOval(windowSize.width/2 - 400, windowSize.height/2 - i, 2 * 400, 2 * i);
+                    g.drawOval(windowSize.width/2 - i, windowSize.height/2 - 400, 2 * i, 2 * 400);
                 }
 
-//                g.setColor(new Color(69, 177, 187));
-                g2d.fillOval(windowSize.width / 2 - r3, windowSize.height / 2 - r3, 2 * r3, 2 * r3);
-                g2d.fillOval((int) p1.x - r1 + windowSize.width / 2, (int) p1.y - r1 + windowSize.height / 2, 2 * r1, 2 * r1);
-                g2d.fillOval((int) p2.x - r2 + windowSize.width / 2, (int) p2.y - r2 + windowSize.height / 2, 2 * r2, 2 * r2);
             }
         };
         panel.setPreferredSize(windowSize);
